@@ -70,3 +70,6 @@
 .schedule-day-content .recommend-card{margin:-5px 0 0 76px;padding:16px 17px;border-radius:20px}
 .schedule-day-content .recommend-card p{font-size:13px}
 .schedule-day-content .week-empty{margin-top:12px}@media(max-width:380px){.schedule-day-content .schedule-row{grid-template-columns:45px minmax(0,1fr);gap:9px}.schedule-day-content .free-slot{margin-left:54px}.schedule-day-content .recommend-card{margin-left:63px}}
+
+/* Align the visible logo artwork with the schedule heading despite transparent image padding. */
+.brand-logo{transform:translateX(-22px)}
