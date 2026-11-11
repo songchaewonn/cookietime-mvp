@@ -55,7 +55,7 @@ function getTowerFlavors(count){let flavors=[];try{flavors=JSON.parse(localStora
 function designStatsPage(){
   const count=state.cookieRewards.loose+state.cookieRewards.boxes*10;
   const flavors=getTowerFlavors(Math.min(11,count));
-  return `<section class="tower-page ${count>=60?'space-tower':''}"><div class="tower-sky"><span class="tower-status">●　${count>=60?'우주':count>0?'산 정상':'등반 준비'}</span><div class="tower-height"><small>현재 고도</small><strong>${count*108}<em>m</em></strong></div><div class="tower-mountains"></div><div class="tower-pile"><span class="tower-base"></span>${flavors.map((flavor,i)=>`<i class="tower-cookie flavor-${flavor}" style="--i:${i}"></i>`).join('')}</div></div><button class="tower-share" data-cookie-share>♧　쿠키 타워 이미지 저장 및 공유</button><details class="tower-record-details"><summary>집중 기록과 스트릭 달력</summary>${originalStatsPage()}</details></section>`
+  return `<section class="tower-page ${count>=60?'space-tower':''}"><div class="tower-sky"><span class="tower-status">●　${count>=60?'우주':count>0?'산 정상':'등반 준비'}</span><div class="tower-height"><small>현재 고도</small><strong>${count*10}<em>m</em></strong></div><div class="tower-mountains"></div><div class="tower-pile"><span class="tower-base"></span>${flavors.map((flavor,i)=>`<i class="tower-cookie flavor-${flavor}" style="--i:${i}"></i>`).join('')}</div></div><button class="tower-share" data-cookie-share>♧　쿠키 타워 이미지 저장 및 공유</button><details class="tower-record-details"><summary>집중 기록과 스트릭 달력</summary>${originalStatsPage()}</details></section>`
 }
 
 async function shareCookieTower(){
@@ -63,7 +63,7 @@ async function shareCookieTower(){
   const sky=ctx.createLinearGradient(0,0,0,1920);sky.addColorStop(0,total>=60?'#09112e':'#fff5dc');sky.addColorStop(.63,total>=60?'#163258':'#eaf7ff');sky.addColorStop(1,'#e7d9c2');ctx.fillStyle=sky;ctx.fillRect(0,0,1080,1920);
   ctx.fillStyle=total>=60?'#ffe887':'#f3c77b';ctx.beginPath();ctx.arc(810,230,120,0,Math.PI*2);ctx.fill();
   ctx.fillStyle=total>=60?'#162c49':'#dfe0dd';ctx.beginPath();ctx.moveTo(0,1110);ctx.lineTo(220,800);ctx.lineTo(410,1080);ctx.lineTo(650,740);ctx.lineTo(870,1060);ctx.lineTo(1080,860);ctx.lineTo(1080,1500);ctx.lineTo(0,1500);ctx.fill();
-  ctx.textAlign='center';ctx.fillStyle=total>=60?'#fff':'#4b3022';ctx.font='bold 58px sans-serif';ctx.fillText(total>=60?'우주로 향하는 쿠키 타워':'산을 오르는 쿠키 타워',540,300);ctx.font='34px sans-serif';ctx.fillText(`현재 고도  ${total*108} m`,540,380);
+  ctx.textAlign='center';ctx.fillStyle=total>=60?'#fff':'#4b3022';ctx.font='bold 58px sans-serif';ctx.fillText(total>=60?'우주로 향하는 쿠키 타워':'산을 오르는 쿠키 타워',540,300);ctx.font='34px sans-serif';ctx.fillText(`현재 고도  ${total*10} m`,540,380);
   const colors=['#f1c27e','#9eaa52','#a76527','#efaa55','#efd29c'],layers=Math.min(15,total),baseY=1520;
   ctx.fillStyle='#513a32';ctx.beginPath();ctx.moveTo(260,baseY);ctx.lineTo(820,baseY);ctx.lineTo(900,baseY+70);ctx.lineTo(180,baseY+70);ctx.closePath();ctx.fill();
   for(let i=0;i<layers;i++){const y=baseY-i*62,w=570-(i%3)*34,x=540-w/2;ctx.fillStyle=colors[(total-i)%colors.length];ctx.beginPath();ctx.ellipse(540,y,w/2,58,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#0002';ctx.beginPath();ctx.ellipse(540,y+21,w/2,36,0,0,Math.PI);ctx.fill();ctx.fillStyle='#51301f';for(let chip=0;chip<4;chip++){const cx=x+90+chip*100+(i%2)*25,cy=y-15+((chip*17+i*9)%22);ctx.save();ctx.translate(cx,cy);ctx.rotate((chip%2?1:-1)*.3);ctx.fillRect(-11,-11,22,22);ctx.restore()}}
