@@ -7,12 +7,13 @@ let cookieUiTick = null;
 let designLastPage=page;
 
 function designOnboardingPage(){
+  const icons={usage:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18V9m5 9V5m5 13v-6m5 6V3"/><path d="m3 7 5-4 5 5 7-6"/></svg>',overlay:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 5-8 5-8-5 8-5Z"/><path d="m4 12 8 5 8-5M4 16l8 5 8-5"/></svg>',notice:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg>',alarm:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 8v5l3 2M5 3 2 6m17-3 3 3"/></svg>',lock:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2"/></svg>'};
   return `<section class="permission-onboarding"><button class="design-back" data-onboarding="skip" aria-label="뒤로">‹</button><h1>원활한 서비스 제공을 위해<br/>다음 권한이 필요해요</h1><div class="permission-list">
-    <article><i>⌁</i><div><strong>앱 사용 기록 접근</strong><p>앱별 사용 시간을 분석해 스마트폰 사용 패턴을 확인합니다.</p></div></article>
-    <article><i>▱</i><div><strong>다른 앱 위에 표시</strong><p>다른 앱을 사용하는 중에도 집중 타이머를 표시합니다.</p></div></article>
-    <article><i>♧</i><div><strong>알림 권한</strong><p>집중 시간 종료 및 휴식 시간 등 주요 알림을 제공합니다.</p></div></article>
-    <article><i>◴</i><div><strong>정확한 알람 권한</strong><p>설정한 집중 시간이 종료되는 시점에 맞춰 알람을 제공합니다.</p></div></article>
-  </div><div class="permission-privacy">♙　수집된 활동 데이터는 이 기기에 저장됩니다. 계정 동기화 전까지 외부로 전송되지 않습니다.</div><p class="permission-note">권한은 기기 설정에서 언제든지 변경할 수 있어요</p><button class="button full" data-onboarding="settings">권한 허용하기　›</button><button class="text-link full" data-onboarding="skip">권한 없이 둘러보기</button></section>`
+    <article><i>${icons.usage}</i><div><strong>앱 사용 기록 접근</strong><p>앱별 사용 시간을 분석해 스마트폰 사용 패턴을 확인합니다.</p></div></article>
+    <article><i>${icons.overlay}</i><div><strong>다른 앱 위에 표시</strong><p>다른 앱을 사용하는 중에도 집중 타이머를 표시합니다.</p></div></article>
+    <article><i>${icons.notice}</i><div><strong>알림 권한</strong><p>집중 시간 종료 및 휴식 시간 등 주요 알림을 제공합니다.</p></div></article>
+    <article><i>${icons.alarm}</i><div><strong>정확한 알람 권한</strong><p>설정한 집중 시간이 종료되는 시점에 맞춰 알람을 제공합니다.</p></div></article>
+  </div><div class="permission-privacy">${icons.lock}<span>수집된 활동 데이터는 이 기기에 저장됩니다. 계정 동기화 전까지 외부로 전송되지 않습니다.</span></div><p class="permission-note">권한은 기기 설정에서 언제든지 변경할 수 있어요</p><button class="button full" data-onboarding="settings">권한 허용하기　›</button><button class="text-link full" data-onboarding="skip">권한 없이 둘러보기</button></section>`
 }
 
 function designHomePage(){
@@ -60,7 +61,7 @@ function getTowerFlavors(count){const stackPattern=[3,4,2,1,4,3,0,1,2,4,3];let f
 function designStatsPage(){
   const count=state.cookieRewards.loose+state.cookieRewards.boxes*10;
   const flavors=getTowerFlavors(Math.min(11,count));
-  return `<section class="tower-page ${count>=60?'space-tower':''}"><div class="tower-sky"><span class="tower-status">●　${count>=60?'우주':count>0?'산 정상':'등반 준비'}</span><div class="tower-height"><small>현재 고도</small><strong>${count*10}<em>m</em></strong></div><div class="tower-mountains" aria-hidden="true"></div><div class="tower-stack"><div class="tower-pile">${flavors.map((flavor,i)=>`<i class="tower-cookie flavor-${flavor}" style="--i:${i};--layer-bottom:${i*45}px;--layer-delay:${i*70}ms;--layer-z:${20-i}"></i>`).join('')}</div><span class="tower-base" aria-hidden="true"></span></div></div><button class="tower-share" data-cookie-share>♧　쿠키 타워 이미지 저장 및 공유</button><details class="tower-record-details"><summary>집중 기록과 스트릭 달력</summary>${originalStatsPage()}</details></section>`
+  return `<section class="tower-page ${count>=60?'space-tower':''}"><div class="tower-sky"><span class="tower-status"><i aria-hidden="true"></i>${count>=60?'우주':count>0?'산 정상':'등반 준비'}</span><div class="tower-height"><small>현재 고도</small><strong>${count*10}<em>m</em></strong></div><svg class="tower-mountains" viewBox="0 0 390 420" preserveAspectRatio="none" aria-hidden="true"><path class="mountain-back" d="M0 225 42 177 75 212 126 123 173 208 231 102 277 190 327 66 390 192V420H0Z"/><path class="mountain-back-snow" d="m104 163 22-40 25 49-24-20-15 28Zm106-22 21-39 27 53-26-27-14 28Zm101-36 16-39 28 69-27-35-14 25Z"/><path class="mountain-front" d="M0 255 71 196 112 235 167 151 218 235 270 184 326 232 390 190V420H0Z"/><path class="mountain-front-snow" d="m138 197 29-46 30 49-31-26-17 35Zm149 8 39-23 40 8v48l-48-13-22 14Z"/><path class="mountain-foothills" d="M0 294 44 277 95 295 143 271 203 298 258 279 316 292 390 263V420H0Z"/></svg><div class="tower-stack"><div class="tower-pile">${flavors.map((flavor,i)=>`<i class="tower-cookie flavor-${flavor}" style="--i:${i};--layer-bottom:${i*39}px;--layer-delay:${i*70}ms;--layer-z:${20-i};--layer-offset:${i%2?5:-5}px;--layer-width:${i%3===1?166:184}px"></i>`).join('')}</div><span class="tower-base" aria-hidden="true"></span></div></div><button class="tower-share" data-cookie-share><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m-4 4 4-4 4 4M5 13v6h14v-6"/></svg><span>쿠키 타워 이미지 저장 및 공유</span></button><details class="tower-record-details"><summary>집중 기록과 스트릭 달력</summary>${originalStatsPage()}</details></section>`
 }
 
 async function shareCookieTower(){
@@ -146,7 +147,7 @@ document.addEventListener('click',event=>{
 
 document.addEventListener('DOMContentLoaded',()=>{
   const nav=document.querySelector('.bottom-nav');
-  if(nav){nav.innerHTML=`<button data-page="home" class="nav-item active"><span>⌂</span><small>홈</small></button><button data-page="schedule" class="nav-item"><span>▦</span><small>시간표</small></button><button data-page="stats" class="nav-item"><span>▥</span><small>기록</small></button><button data-page="settings" class="nav-item"><span>♙</span><small>MY</small></button>`;nav.querySelectorAll('.nav-item').forEach(button=>button.addEventListener('click',()=>{page=button.dataset.page;render();nav.querySelectorAll('.nav-item').forEach(item=>item.classList.toggle('active',item===button))}))}
+  if(nav){nav.innerHTML=`<button data-page="home" class="nav-item active"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z"/></svg><small>홈</small></button><button data-page="schedule" class="nav-item"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18M7 14h2m3 0h2m3 0h1M7 17h2m3 0h2"/></svg><small>시간표</small></button><button data-page="stats" class="nav-item"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V11h4v9Zm6 0V5h4v15Zm6 0V2h4v18Z"/></svg><small>기록</small></button><button data-page="settings" class="nav-item"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="4"/><path d="M4 21a8 8 0 0 1 16 0Z"/></svg><small>MY</small></button>`;nav.querySelectorAll('.nav-item').forEach(button=>button.addEventListener('click',()=>{page=button.dataset.page;render();nav.querySelectorAll('.nav-item').forEach(item=>item.classList.toggle('active',item===button))}))}
   document.querySelector('.brand')?.addEventListener('click',event=>{event.preventDefault();page='home';render()});
 });
 

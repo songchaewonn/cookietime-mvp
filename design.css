@@ -119,3 +119,36 @@
 .complete-display{position:relative;display:flex;align-items:center;justify-content:center;padding:0 20% 0 6%}
 .complete-display>strong{font:inherit;color:inherit;line-height:1;font-variant-numeric:tabular-nums}
 .complete-check{position:absolute;right:5%;top:50%;transform:translateY(-50%);width:clamp(32px,9vw,48px);height:clamp(32px,9vw,48px);display:grid;place-items:center;border-radius:50%;background:#624a3b;color:#fff8ed;font:700 clamp(18px,5vw,26px)/1 var(--font)}
+
+/* Match the tower illustration to the layered mountain and cookie reference. */
+.tower-sky{background:linear-gradient(180deg,#fffdf8 0%,#eef8ff 30%,#dceefa 72%,#eee5d7 100%)}
+.tower-mountains{position:absolute;z-index:0;top:39%;right:-5%;bottom:0;left:-5%;width:110%;height:61%;overflow:visible;background:none}
+.tower-mountains .mountain-back{fill:#d8dcdd}
+.tower-mountains .mountain-back-snow{fill:#f8faf9}
+.tower-mountains .mountain-front{fill:#cfd4d6}
+.tower-mountains .mountain-front-snow{fill:#f4f6f4}
+.tower-mountains .mountain-foothills{fill:#e9dfcf}
+.tower-mountains::before,.tower-mountains::after{content:none!important}
+.tower-stack{bottom:22px;height:92%;width:min(350px,88%)}
+.tower-pile{inset:0 0 32px;width:100%;height:auto;transform:none}
+.tower-cookie{left:50%;bottom:var(--layer-bottom);margin:0;width:var(--layer-width);height:66px;border-radius:50%;background:linear-gradient(180deg,var(--cookie-top) 0 72%,var(--cookie-side) 73% 100%);box-shadow:inset 0 -3px #68412218,0 3px 4px #51341d20;filter:none;overflow:visible;transform:translateX(calc(-50% + var(--layer-offset)));animation:tower-rise .45s both;animation-delay:var(--layer-delay)}
+.tower-cookie:nth-child(2n){width:var(--layer-width);margin:0}
+.tower-cookie::after{content:"";position:absolute;inset:0;border-radius:50%;background:linear-gradient(45deg,transparent 16%,var(--cookie-chip) 17% 84%,transparent 85%) 25% 39%/17px 17px no-repeat,linear-gradient(45deg,transparent 16%,var(--cookie-chip) 17% 84%,transparent 85%) 43% 66%/13px 13px no-repeat,linear-gradient(45deg,transparent 16%,var(--cookie-chip) 17% 84%,transparent 85%) 61% 28%/11px 11px no-repeat,linear-gradient(45deg,transparent 16%,var(--cookie-chip) 17% 84%,transparent 85%) 77% 56%/18px 18px no-repeat}
+.tower-cookie.flavor-0{--cookie-top:#f8bd73;--cookie-side:#d8954f;--cookie-chip:#4b2b1e}
+.tower-cookie.flavor-1{--cookie-top:#a7b45b;--cookie-side:#75843a;--cookie-chip:#778537}
+.tower-cookie.flavor-2{--cookie-top:#a96629;--cookie-side:#75451f;--cookie-chip:#f2d39c}
+.tower-cookie.flavor-3{--cookie-top:#f2d69b;--cookie-side:#d8b779;--cookie-chip:#bd5747}
+.tower-cookie.flavor-4{--cookie-top:#f1a276;--cookie-side:#d98258;--cookie-chip:#573321}
+.tower-pile .tower-cookie.flavor-0,.tower-pile .tower-cookie.flavor-1,.tower-pile .tower-cookie.flavor-2,.tower-pile .tower-cookie.flavor-3,.tower-pile .tower-cookie.flavor-4{background:linear-gradient(180deg,var(--cookie-top) 0 72%,var(--cookie-side) 73% 100%);filter:none}
+.tower-base{width:min(300px,88%);height:36px;background:linear-gradient(180deg,#78574c 0 70%,#50352c 71%);clip-path:polygon(13% 0,87% 0,100% 100%,0 100%)}
+.tower-status{display:flex;align-items:center;gap:9px}
+.tower-status i{width:9px;height:9px;border-radius:50%;background:#f5a000}
+.tower-share{display:flex;align-items:center;justify-content:center;gap:14px}
+.tower-share svg{width:22px;height:22px;fill:none;stroke:#f8dfce;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.calendar-day.qualified{background:#f2bd76;color:#4c2c18;font-weight:700;box-shadow:inset 0 -3px #df9c4f}
+.calendar-day.qualified.today{outline-color:#e98449}
+.permission-list article i svg{width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.permission-privacy{display:flex;align-items:center;gap:12px}
+.permission-privacy svg{width:24px;height:24px;flex:none;fill:none;stroke:#805c4d;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.bottom-nav .nav-item svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.space-tower .mountain-back,.space-tower .mountain-front{fill:#253658}.space-tower .mountain-back-snow,.space-tower .mountain-front-snow{fill:#b3c2d8}.space-tower .mountain-foothills{fill:#183a62}
