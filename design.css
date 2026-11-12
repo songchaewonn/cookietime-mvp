@@ -123,6 +123,34 @@
 /* Match the tower illustration to the layered mountain and cookie reference. */
 .tower-sky{background:linear-gradient(180deg,#fffdf8 0%,#eef8ff 30%,#dceefa 72%,#eee5d7 100%)}
 .tower-mountains{position:absolute;z-index:0;top:39%;right:-5%;bottom:0;left:-5%;width:110%;height:61%;overflow:visible;background:none}
+
+/* Game screen tuned to the supplied Chagok mockup. */
+#app:has(.game-card)>.eyebrow{margin-top:12px;color:#8b7568;font-size:15px}
+#app:has(.game-card)>.page-title{margin:8px 0 4px;color:#38251b;font:700 28px/1.25 var(--display)}
+#app:has(.game-card)>.page-subtitle{margin:0;color:#9a877b;font-size:15px}
+.game-card{margin-top:22px;padding:20px;border:1.5px solid #eee1d1;border-radius:30px;background:#f8f3eb;box-shadow:0 8px 20px #50351a0a;color:#38251b}
+.game-card-heading{padding:8px 12px;border-radius:24px;background:#e9dfd2;font:14px var(--font)}
+.game-round-badge{min-width:42px;text-align:center;padding:8px 13px;background:#ed9b40;font:14px var(--display)}
+.game-target{gap:8px;margin:20px 0 20px}
+.game-target-label{font:14px/1.2 var(--font);letter-spacing:.25px;color:#806d5e}
+.game-instruction{min-width:0;width:max-content;max-width:100%;padding:9px 18px;border:1.5px solid #ead9c5;border-radius:23px;background:#fffdfa;box-shadow:0 2px 3px #593a1c0d;color:#38251b;font:22px/1.35 var(--font);white-space:nowrap}
+.game-feedback{margin:0;text-align:center;color:#c8774e;font-size:12px}
+.game-timer-row{margin:0 2px 8px;color:#806d5e;font:14px var(--font)}
+.game-timer-row strong{color:#df5c23;font:700 18px var(--display);font-variant-numeric:tabular-nums}
+.game-time-track{height:10px;margin:0 0 23px;border-radius:9px;background:#e7dbce}
+.game-time-track span{border-radius:inherit;background:linear-gradient(90deg,#55e4b5 0%,#f3d56c 52%,#f38b70 100%);transition:width .05s linear}
+.game-board{padding:0}
+.gem-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.gem{border-radius:25px;box-shadow:0 3px 6px #4d32141c;transition:transform .14s ease,filter .14s ease}
+.gem:active{transform:scale(.96)}
+.game-cookie-icon{display:block;width:54%;height:54%;overflow:visible;filter:drop-shadow(0 1px 0 #e9d9bd)}
+.game-cookie-icon path{fill:#fff8e8}
+.gem.brown{background:#f48f86}.gem.pink{background:#f3a3b8}.gem.blue{background:#9ec9f2}.gem.green{background:#9fd3a7}.gem.orange{background:#ffb17e}.gem.yellow{background:#ffd36e}
+.game-choices{margin-top:12px;justify-items:center}
+.game-choices .button{min-width:150px;text-align:center}
+.game-card.is-playing .game-choices{display:none}
+.game-choices #game-result{color:#87583d;font:14px var(--display)}
+@media(max-width:380px){.game-card{padding:17px}.gem-row{gap:11px}.gem{border-radius:21px}.game-instruction{font-size:19px}.game-target{margin:18px 0}.game-time-track{margin-bottom:18px}}
 .tower-mountains .mountain-back{fill:#d8dcdd}
 .tower-mountains .mountain-back-snow{fill:#f8faf9}
 .tower-mountains .mountain-front{fill:#cfd4d6}
