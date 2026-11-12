@@ -274,3 +274,11 @@ body:has(.bake-complete){background:#fbf9f6}
     linear-gradient(45deg,transparent 16%,var(--cookie-chip) 17% 84%,transparent 85%) 64% 30%/22px 21px no-repeat,
     linear-gradient(45deg,transparent 16%,var(--cookie-chip) 17% 84%,transparent 85%) 79% 56%/18px 17px no-repeat;
 }
+.chagok-home .oven-bake{right:6%;bottom:12%;width:clamp(92px,25%,112px);min-height:0;padding:8px 7px;box-sizing:border-box;border-radius:22px;font-size:13px;white-space:nowrap}
+.chagok-quick .quick-icon svg{stroke-width:2.6}
+
+
+/* Use the pale cookie palette for primary schedule and task actions. */
+.task-add-button,.modal #class-form .modal-actions > button[type=submit],.modal #task-form > button[type=submit]{background:#f3dfc2;color:#3b2418;box-shadow:0 5px 12px #8a5b3024}
+.task-add-button:hover,.modal #class-form .modal-actions > button[type=submit]:hover,.modal #task-form > button[type=submit]:hover{background:#edcfaa}
+.task-add-button:focus-visible,.modal #class-form .modal-actions > button[type=submit]:focus-visible,.modal #task-form > button[type=submit]:focus-visible{outline:3px solid #8a5b30;outline-offset:2px}
