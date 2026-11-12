@@ -196,3 +196,31 @@ body:has(.bake-complete){background:#fbf9f6}
 .tower-cookie{left:calc(50% + var(--layer-left));bottom:var(--layer-bottom);margin:0;width:var(--layer-width);height:66px;border-radius:50%;background:linear-gradient(180deg,var(--cookie-top) 0 72%,var(--cookie-side) 73% 100%);box-shadow:inset 0 -3px #68412218,0 3px 4px #51341d20;filter:none;overflow:visible;transform:none;translate:0 0;animation:tower-cookie-rise .45s both;animation-delay:var(--layer-delay)}
 @keyframes tower-cookie-rise{from{opacity:0;translate:0 -34px}to{opacity:1;translate:0 0}}
 @media(max-height:720px){.bake-complete{padding-top:18px}.bake-complete .complete-eyebrow{margin-bottom:18px}.complete-oven.oven-machine{width:min(78vw,300px);margin:14px auto}.bake-complete .complete-summary{margin-top:auto}}
+
+/* Cookie Tower: match the supplied mountain scene and baked-cookie stack. */
+.month-day-dots{position:absolute;left:0;right:0;bottom:4px;display:flex;justify-content:center;gap:3px;pointer-events:none}
+.month-day-dots i{position:static;flex:0 0 4px;width:4px;height:4px;margin:0;border-radius:50%;background:#805321}
+.tower-sky{background:linear-gradient(180deg,#fffdf8 0%,#edf8ff 28%,#dceefa 68%,#e9dfcf 100%)}
+.tower-sky::before,.tower-sky::after{content:"";position:absolute;z-index:1;pointer-events:none;background:#fff;opacity:.92}
+.tower-sky::before{width:112px;height:34px;left:8%;top:54%;border-radius:50%;box-shadow:23px -9px 0 -3px #fff,48px 1px 0 -6px #fff}
+.tower-sky::after{width:102px;height:30px;right:7%;top:37%;border-radius:50%;box-shadow:20px -8px 0 -3px #fff,43px 0 0 -5px #fff}
+.tower-status,.tower-height{z-index:3}
+.tower-ruler{position:absolute;z-index:2;left:8px;top:55%;bottom:23%;display:flex;flex-direction:column;justify-content:space-between;color:#907f70;font-size:10px;pointer-events:none}
+.tower-ruler i{position:relative;min-width:36px;padding-left:12px;font-style:normal}
+.tower-ruler i::before{content:"";position:absolute;left:0;top:50%;width:8px;height:1px;background:#a99a8c}
+.tower-stack{bottom:24px;height:76%;width:min(350px,94%)}
+.tower-pile{inset:0 0 34px}
+.tower-cookie,.tower-pile .tower-cookie{left:calc(50% + var(--layer-left));bottom:var(--layer-bottom);margin:0;width:var(--layer-width);height:140px;border-radius:0;background:transparent url("public/assets/tower-cookie-reference.png") center/100% 100% no-repeat;box-shadow:none;filter:none;overflow:visible;transform:none;translate:0 0;animation:tower-cookie-rise .48s both;animation-delay:var(--layer-delay)}
+.tower-pile .tower-cookie.flavor-0{filter:none}
+.tower-pile .tower-cookie.flavor-1{filter:hue-rotate(58deg) saturate(.7) brightness(.92)}
+.tower-pile .tower-cookie.flavor-2{filter:brightness(.75) sepia(.25)}
+.tower-pile .tower-cookie.flavor-3{filter:hue-rotate(-16deg) saturate(.75) brightness(1.08)}
+.tower-pile .tower-cookie.flavor-4{filter:hue-rotate(-8deg) saturate(1.15) brightness(1.03)}
+.tower-base{z-index:4;width:min(300px,88%);height:36px;background:linear-gradient(180deg,#78574c 0 70%,#50352c 71%)}
+.tower-share{position:relative;z-index:2}
+.space-tower .tower-sky::before,.space-tower .tower-sky::after{display:none}
+.chart-track span{min-height:0!important}
+.oven-window>img{top:43%;filter:drop-shadow(0 0 11px #ff4d18e0) drop-shadow(0 5px 4px #482b1b88)}
+.bake-label{letter-spacing:0}
+.tower-ruler{display:flex}
+.space-tower .tower-ruler{display:none}
