@@ -138,7 +138,7 @@
 .tower-cookie.flavor-1{--cookie-top:#a7b45b;--cookie-side:#75843a;--cookie-chip:#778537}
 .tower-cookie.flavor-2{--cookie-top:#a96629;--cookie-side:#75451f;--cookie-chip:#f2d39c}
 .tower-cookie.flavor-3{--cookie-top:#f2d69b;--cookie-side:#d8b779;--cookie-chip:#bd5747}
-.tower-cookie.flavor-4{--cookie-top:#f1a276;--cookie-side:#d98258;--cookie-chip:#573321}
+.tower-cookie.flavor-4{--cookie-top:#f4ad61;--cookie-side:#d38a43;--cookie-chip:#f6dda2}
 .tower-pile .tower-cookie.flavor-0,.tower-pile .tower-cookie.flavor-1,.tower-pile .tower-cookie.flavor-2,.tower-pile .tower-cookie.flavor-3,.tower-pile .tower-cookie.flavor-4{background:linear-gradient(180deg,var(--cookie-top) 0 72%,var(--cookie-side) 73% 100%);filter:none}
 .tower-base{width:min(300px,88%);height:36px;background:linear-gradient(180deg,#78574c 0 70%,#50352c 71%);clip-path:polygon(13% 0,87% 0,100% 100%,0 100%)}
 .tower-status{display:flex;align-items:center;gap:9px}
