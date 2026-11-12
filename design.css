@@ -208,11 +208,9 @@ body{background:#fbf9f6}
 .complete-check{position:absolute;right:4%;top:50%;width:clamp(34px,10vw,52px);height:clamp(34px,10vw,52px);display:grid;place-items:center;transform:translateY(-50%);border-radius:50%;background:#604b3c;color:#fff7ef;font:700 24px/1 var(--font)}
 .complete-window{z-index:1}
 .complete-window::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 100%,#ff9d39aa,transparent 58%);pointer-events:none}
-.complete-steam{position:absolute;z-index:2;bottom:27%;width:12px;height:26%;border-radius:50%;background:linear-gradient(transparent,#fff2d6aa,transparent);filter:blur(4px);animation:steam-rise 1.8s ease-in-out infinite}
-.steam-one{left:32%}.steam-two{left:49%;height:34%;animation-delay:.35s}.steam-three{left:66%;animation-delay:.7s}
 .complete-cookie-slide{position:absolute;z-index:4;left:50%;bottom:13%;width:47%;height:31%;object-fit:contain;opacity:0;filter:drop-shadow(0 12px 8px #4b291e55);animation:cookie-slide-out 1.05s .16s cubic-bezier(.2,.75,.25,1) both}
 @keyframes cookie-slide-out{0%{opacity:0;transform:translate(-50%,0) scale(.78)}35%{opacity:1}100%{opacity:1;transform:translate(-50%,92%) scale(1.1)}}
-@keyframes steam-rise{0%,100%{opacity:.25;translate:0 8px}50%{opacity:.8;translate:0 -8px}}
+
 .bake-complete .complete-summary{width:100%;max-width:360px;margin:auto 0 20px;padding-top:8px;text-align:center;color:#543724;font-size:14px}
 .complete-actions{width:100%;max-width:360px;display:grid;gap:12px}
 .bake-complete .complete-actions>.button{width:100%;max-width:none;min-height:62px;margin:0;border:0;border-radius:40px;background:#fffaf5;color:#3b251a;font:700 18px var(--display);box-shadow:0 8px 16px #75491f20}
@@ -282,3 +280,10 @@ body:has(.bake-complete){background:#fbf9f6}
 .task-add-button,.modal #class-form .modal-actions > button[type=submit],.modal #task-form > button[type=submit]{background:#f3dfc2;color:#3b2418;box-shadow:0 5px 12px #8a5b3024}
 .task-add-button:hover,.modal #class-form .modal-actions > button[type=submit]:hover,.modal #task-form > button[type=submit]:hover{background:#edcfaa}
 .task-add-button:focus-visible,.modal #class-form .modal-actions > button[type=submit]:focus-visible,.modal #task-form > button[type=submit]:focus-visible{outline:3px solid #8a5b30;outline-offset:2px}
+
+/* Cookie visuals: keep the mascot on the back half of the tray and make the oven glow read as reflected light. */
+.oven-window>img{top:29%;width:42%;height:44%;filter:drop-shadow(0 0 13px #ff4d18e8) drop-shadow(0 0 6px #ff8a38aa) drop-shadow(0 4px 4px #482b1b88)}
+.game-cookie-icon{width:60%;height:60%;filter:drop-shadow(0 2px 0 #e9d9bd)}
+.complete-speed-line{position:absolute;z-index:3;bottom:28%;width:5px;height:31%;border-radius:999px;background:#fff8e8;box-shadow:0 0 5px #fff8e8aa;opacity:0;transform-origin:center top;animation:cookie-speed-streak .52s cubic-bezier(.16,.8,.3,1) both}
+.speed-line-one{left:32%;animation-delay:.16s}.speed-line-two{left:49%;height:38%;animation-delay:.11s}.speed-line-three{left:66%;animation-delay:.2s}
+@keyframes cookie-speed-streak{0%{opacity:0;transform:translateY(-12px) scaleY(.25)}16%{opacity:1}100%{opacity:0;transform:translateY(58px) scaleY(1.2)}}

@@ -1,0 +1,11 @@
+{
+  "name": "chagok-cookie-tower",
+  "version": "1.0.0",
+  "private": true,
+  "description": "차곡 쿠키 타워 독립 실행 모듈",
+  "scripts": {
+    "start": "node server.cjs",
+    "start:app": "node server.cjs --app",
+    "test": "node --test tower-core.test.cjs tower-integration.test.cjs"
+  }
+}

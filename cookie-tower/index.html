@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fbf9f6">
+  <meta name="description" content="한 시간의 집중을 차곡차곡. 매달 새롭게 쌓는 나만의 쿠키 타워.">
+  <title>차곡 · 쿠키 타워</title>
+  <link rel="icon" href="assets/chagok-cookie.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="tower.css">
+  <script defer src="tower-core.js"></script>
+  <script defer src="tower-art.js"></script>
+  <script defer src="tower.js"></script>
+</head>
+<body>
+  <div class="workspace">
+    <aside class="story-panel">
+      <a class="desktop-brand" href="./" aria-label="차곡 쿠키 타워"><img src="assets/chagok-logo.png" alt="chagok"></a>
+      <div class="eyebrow"><span></span> LITTLE FOCUS, BIG TOWER</div>
+      <h1>집중한 시간만큼,<br>차곡차곡.</h1>
+      <p class="story-copy">한 시간의 집중이 한 층의 쿠키로.<br>오늘의 작은 몰입을 높이 쌓아보세요.</p>
+      <div class="monthly-overview">
+        <div class="section-heading"><h2 id="month-label">이번 달의 타워</h2><span class="live-dot">나의 기록</span></div>
+        <div class="month-value"><strong id="real-cookie-count">0</strong><span>개의 쿠키</span><i>🍪</i></div>
+        <div class="month-meta"><span id="real-focus-time">0시간 집중</span><span id="reset-label">12월 1일 새로 시작해요</span></div>
+      </div>
+      <button class="history-link" data-action="history"><span class="history-icon">↗</span><span>지난달의 나 만나기<small>쌓아온 노력은 계속 남아 있어요</small></span><b>›</b></button>
+      <div class="story-footer"><span class="tiny-cookie">✦</span> 작은 집중도, 소중한 한 층.</div>
+    </aside>
+
+    <main class="phone-column">
+      <div class="phone" id="tower-phone">
+        <header class="phone-header">
+          <a href="./" class="phone-logo" aria-label="차곡 쿠키 타워"><img src="assets/chagok-logo.png" alt="chagok"></a>
+          <button class="preview-indicator" id="preview-indicator" data-action="controls">미리보기</button>
+          <button class="bell-button" data-action="news" aria-label="타워 소식과 적립 안내"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-2.5 7-2.5 9 5.5 1.4 11.5 1.4 17 0 0-2-2.5-2-2.5-9Z"/><path d="M9 20a3.2 3.2 0 0 0 6 0"/></svg><i></i></button>
+        </header>
+        <section class="tower-view" aria-label="이번 달의 쿠키 타워">
+          <svg id="tower-scene" viewBox="0 0 390 851" role="img" aria-labelledby="scene-title scene-description"><title id="scene-title">산 정상의 쿠키 타워</title><desc id="scene-description">집중할 때마다 쿠키가 쌓이는 나만의 타워</desc></svg>
+          <div class="altitude-heading">
+            <button class="stage-pill" data-action="stages" aria-label="고도별 배경 보기"><i></i><span id="stage-name">산 정상</span></button>
+            <div class="altitude-line"><span>현재 고도</span><strong id="altitude">540</strong><b>m</b></div>
+            <div class="tower-subtitle" id="tower-subtitle"></div>
+          </div>
+          <div class="reward-bubble" id="reward-bubble" role="status"></div>
+          <div class="empty-tower" id="empty-tower" hidden><strong>첫 쿠키를 기다리는 중</strong><span>한 시간의 집중으로 시작해요</span><button data-action="focus">집중 시작하기 ↗</button></div>
+          <button class="share-button" data-action="share"><svg viewBox="0 0 24 28" aria-hidden="true"><path d="M7 10H3v15h18V10h-4M12 18V2m-5 5 5-5 5 5"/></svg><span>쿠키 타워 이미지 저장 및 공유</span></button>
+        </section>
+        <nav class="bottom-nav" aria-label="주요 메뉴">
+          <button data-action="focus"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m2 10 10-9 10 9M5 10v11h5v-7h4v7h5V10"/></svg><span>홈</span></button>
+          <button data-action="gap"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="17" rx="2"/><path d="M7 2v5m10-5v5M3 10h18M7 14h.1m4 0h.1m4 0h.1M7 17h.1m4 0h.1m4 0h.1"/></svg><span>시간표</span></button>
+          <button class="active" data-action="history" aria-label="기록, 월별 쿠키 타워"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="12" width="4" height="10" rx=".7"/><rect x="10" y="7" width="4" height="15" rx=".7"/><rect x="18" y="2" width="4" height="20" rx=".7"/></svg><span>기록</span></button>
+          <button data-action="settings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="6" r="4"/><path d="M4 21c0-10 16-10 16 0-4.7 2-11.3 2-16 0Z"/></svg><span>MY</span></button>
+        </nav>
+      </div>
+      <div class="phone-caption"><span id="caption-mode">산 정상 미리보기</span><span>차곡 쿠키 타워</span></div>
+    </main>
+
+    <aside class="control-panel" id="desktop-controls">
+      <div class="panel-topline"><span class="eyebrow">MY COOKIE TOWER</span><span class="edition">01 — 차곡</span></div>
+      <h2>조금 더 높이,<br>오늘의 쿠키 타워</h2>
+      <div class="mode-switch" aria-label="타워 표시 모드"><button class="selected" data-mode="preview">미리보기</button><button data-mode="real">내 타워</button></div>
+      <div id="control-content"></div>
+      <div class="earning-guide"><h3>집중은 이렇게 쌓여요</h3><div><span><i class="rule-dot normal"></i>기본 집중</span><strong>1개 <small>/ 시간</small></strong></div><div><span><i class="rule-dot gap"></i>공강 중 집중</span><strong>2개 <small>/ 시간</small></strong></div><div><span><i class="rule-dot streak"></i>5시간 이상 연속 집중</span><strong>5개 <small>/ 시간</small></strong></div><p>5번째 시간부터 5개씩, 보너스는 중복되지 않아요.<br>쿠키 한 개는 10m. 매달 새로운 도전을 시작해요.</p></div>
+      <button class="quiet-button" data-action="stages">높아질수록 달라지는 풍경 <span>↗</span></button>
+    </aside>
+  </div>
+  <dialog id="sheet" aria-labelledby="sheet-title"><div class="sheet-drag"></div><div class="sheet-heading"><h2 id="sheet-title"></h2><button id="close-sheet" aria-label="닫기">×</button></div><div id="sheet-content"></div></dialog>
+  <div class="toast" id="toast" role="status"></div>
+</body>
+</html>
