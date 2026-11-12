@@ -152,3 +152,47 @@
 .permission-privacy svg{width:24px;height:24px;flex:none;fill:none;stroke:#805c4d;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .bottom-nav .nav-item svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .space-tower .mountain-back,.space-tower .mountain-front{fill:#253658}.space-tower .mountain-back-snow,.space-tower .mountain-front-snow{fill:#b3c2d8}.space-tower .mountain-foothills{fill:#183a62}
+
+/* Responsive screen frame and oven rebuilt from HTML so timer digits appear only once. */
+body{background:#fbf9f6}
+.app-shell{width:min(390px,100%);max-width:390px;min-height:100dvh;margin:0 auto;display:flex;flex-direction:column;align-items:stretch;padding-top:8px;background:#fbf9f6}
+.app-shell>header,.app-shell>#app{width:100%}
+.app-shell>.bottom-nav{width:min(390px,100%)}
+.oven-machine{position:relative;width:min(100%,420px);aspect-ratio:1/1;margin:52px auto 18px;padding:0;overflow:visible;border:0;border-radius:16%;background:#e9e1d5;box-shadow:0 16px 34px #26170e45}
+.oven-machine-art{display:none!important}
+.oven-top-lines{position:absolute;top:8%;left:38%;right:38%;height:3px;display:flex;gap:8px}
+.oven-top-lines i{height:100%;flex:1;border-radius:8px;background:#d8d0c6}
+.oven-display,.oven-machine .complete-display{position:absolute;z-index:2;left:11%;top:14%;width:78%;height:18%;padding:0 17% 0 4%;display:flex;align-items:center;justify-content:center;border:4px solid #c9bdad;border-radius:28px;background:#3c291f;color:#fff6ec;font:700 clamp(34px,9vw,54px)/1 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:2px;font-variant-numeric:tabular-nums;box-shadow:inset 0 2px 2px #ffffff18}
+.oven-display .focus-timer,.complete-display>strong{font:inherit;line-height:1;color:inherit;font-variant-numeric:tabular-nums;white-space:nowrap}
+.oven-machine .oven-pause{position:absolute;right:4%;top:50%;transform:translateY(-50%);width:clamp(34px,10vw,52px);height:clamp(34px,10vw,52px);display:grid;place-items:center;background:#604b3c;color:white;font-size:18px}
+.oven-window,.complete-window{position:absolute;left:8%;top:41%;width:84%;height:43%;overflow:hidden;border:12px solid #c9beaf;border-radius:34px;background:radial-gradient(ellipse at 50% 58%,#ff783d 0,#e84d22 54%,#812d1c 100%);box-shadow:inset 0 0 24px #55261c88}
+.oven-heat{position:absolute;z-index:1;left:10%;right:10%;height:5px;border-radius:8px;background:#ff6c32;box-shadow:0 0 8px #ff6c32}
+.oven-heat-top,.complete-heat-top{top:12%}.oven-heat-bottom{bottom:12%}
+.oven-tray,.complete-tray{position:absolute;z-index:2;left:8%;right:8%;bottom:23%;height:36%;border-radius:10px 10px 15px 15px;background:#49342d;clip-path:polygon(10% 0,90% 0,100% 100%,0 100%);box-shadow:0 8px 9px #28171155}
+.oven-window>img{position:absolute;z-index:3;left:50%;top:39%;width:42%;height:48%;object-fit:contain;transform:translateX(-50%);filter:drop-shadow(0 5px 2px #482b1b55)}
+.oven-foot{position:absolute;bottom:6%;left:20%;right:20%;height:4%;border-radius:20px;background:#b9afa2;box-shadow:0 3px 2px #74675944}
+.complete-oven.oven-machine{width:min(100%,360px);margin:24px auto 26px;flex:none;background:#e9e1d5;box-shadow:0 18px 32px #7a471e35}
+.bake-complete{width:100%;min-height:100dvh;margin:0;padding:24px 24px 34px;background:linear-gradient(180deg,#ffe9bd 0%,#ffd38f 55%,#f4bd70 100%);display:flex;flex-direction:column;align-items:center;overflow:hidden;color:#432719}
+.bake-complete .complete-eyebrow{align-self:flex-start;margin:0 0 42px;color:#ead8c2;font-size:14px}
+.bake-complete h1{width:100%;margin:0;text-align:center;font:700 38px/1.2 var(--display);color:#432719}
+.complete-oven.oven-machine{overflow:visible}
+.complete-display{padding-right:17%;padding-left:4%;display:flex;align-items:center;justify-content:center}
+.complete-check{position:absolute;right:4%;top:50%;width:clamp(34px,10vw,52px);height:clamp(34px,10vw,52px);display:grid;place-items:center;transform:translateY(-50%);border-radius:50%;background:#604b3c;color:#fff7ef;font:700 24px/1 var(--font)}
+.complete-window{z-index:1}
+.complete-window::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 100%,#ff9d39aa,transparent 58%);pointer-events:none}
+.complete-steam{position:absolute;z-index:2;bottom:27%;width:12px;height:26%;border-radius:50%;background:linear-gradient(transparent,#fff2d6aa,transparent);filter:blur(4px);animation:steam-rise 1.8s ease-in-out infinite}
+.steam-one{left:32%}.steam-two{left:49%;height:34%;animation-delay:.35s}.steam-three{left:66%;animation-delay:.7s}
+.complete-cookie-slide{position:absolute;z-index:4;left:50%;bottom:13%;width:47%;height:31%;object-fit:contain;opacity:0;filter:drop-shadow(0 12px 8px #4b291e55);animation:cookie-slide-out 1.05s .16s cubic-bezier(.2,.75,.25,1) both}
+@keyframes cookie-slide-out{0%{opacity:0;transform:translate(-50%,0) scale(.78)}35%{opacity:1}100%{opacity:1;transform:translate(-50%,92%) scale(1.1)}}
+@keyframes steam-rise{0%,100%{opacity:.25;translate:0 8px}50%{opacity:.8;translate:0 -8px}}
+.bake-complete .complete-summary{width:100%;max-width:360px;margin:auto 0 20px;padding-top:8px;text-align:center;color:#543724;font-size:14px}
+.complete-actions{width:100%;max-width:360px;display:grid;gap:12px}
+.bake-complete .complete-actions>.button{width:100%;max-width:none;min-height:62px;margin:0;border:0;border-radius:40px;background:#fffaf5;color:#3b251a;font:700 18px var(--display);box-shadow:0 8px 16px #75491f20}
+.bake-complete .complete-actions>.button.secondary{background:#382219;color:#fff8ef}
+body:has(.bake-complete){background:#fbf9f6}
+.app-shell:has(.bake-complete){width:min(390px,100%);min-height:100dvh;background:transparent}
+.app-shell:has(.bake-complete) main{width:100%;padding:0}
+.app-shell:has(.bake-complete)>.topbar,.app-shell:has(.bake-complete)>.bottom-nav{display:none}
+.tower-cookie{left:calc(50% + var(--layer-left));bottom:var(--layer-bottom);margin:0;width:var(--layer-width);height:66px;border-radius:50%;background:linear-gradient(180deg,var(--cookie-top) 0 72%,var(--cookie-side) 73% 100%);box-shadow:inset 0 -3px #68412218,0 3px 4px #51341d20;filter:none;overflow:visible;transform:none;translate:0 0;animation:tower-cookie-rise .45s both;animation-delay:var(--layer-delay)}
+@keyframes tower-cookie-rise{from{opacity:0;translate:0 -34px}to{opacity:1;translate:0 0}}
+@media(max-height:720px){.bake-complete{padding-top:18px}.bake-complete .complete-eyebrow{margin-bottom:18px}.complete-oven.oven-machine{width:min(78vw,300px);margin:14px auto}.bake-complete .complete-summary{margin-top:auto}}
