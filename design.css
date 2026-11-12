@@ -287,3 +287,7 @@ body:has(.bake-complete){background:#fbf9f6}
 .complete-speed-line{position:absolute;z-index:3;bottom:28%;width:5px;height:31%;border-radius:999px;background:#fff8e8;box-shadow:0 0 5px #fff8e8aa;opacity:0;transform-origin:center top;animation:cookie-speed-streak .52s cubic-bezier(.16,.8,.3,1) both}
 .speed-line-one{left:32%;animation-delay:.16s}.speed-line-two{left:49%;height:38%;animation-delay:.11s}.speed-line-three{left:66%;animation-delay:.2s}
 @keyframes cookie-speed-streak{0%{opacity:0;transform:translateY(-12px) scaleY(.25)}16%{opacity:1}100%{opacity:0;transform:translateY(58px) scaleY(1.2)}}
+
+/* Make the two utility icons called out in the home screen visibly bolder. */
+.chagok-quick button[data-go="stats"] .quick-icon svg,
+.chagok-quick button[data-go="focus"] .quick-icon svg{stroke-width:3.4}
