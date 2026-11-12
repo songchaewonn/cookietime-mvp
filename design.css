@@ -291,3 +291,9 @@ body:has(.bake-complete){background:#fbf9f6}
 /* Make the two utility icons called out in the home screen visibly bolder. */
 .chagok-quick button[data-go="stats"] .quick-icon svg,
 .chagok-quick button[data-go="focus"] .quick-icon svg{stroke-width:3.4}
+
+
+/* Match the supplied flat bitten-cookie game icons and keep the history shortcut light. */
+.gem::before,.gem::after{display:none!important}
+.game-cookie-icon{filter:none}
+.chagok-quick button[data-go="stats"] .quick-icon svg{stroke-width:1.8}
