@@ -1,6 +1,5 @@
 /* Scoped to the existing app. The standalone preview has its own styles. */
 .app-shell:has(.integrated-tower){padding:0;background:#fbf9f6;min-height:100svh}
-.app-shell:has(.integrated-tower)>.topbar{height:64px;min-height:64px;background:#fbf9f6}
 .app-shell:has(.integrated-tower)>#app{padding:0}
 .app-shell:has(.integrated-tower)>.bottom-nav{width:min(358px,calc(100% - 32px));height:65px;bottom:10px;margin:0;border:1px solid #e8e0d4;border-radius:40px;background:#f8f4edf5;padding:0 20px;box-shadow:0 6px 10px #40332123;backdrop-filter:blur(16px)}
 .app-shell:has(.integrated-tower)>.bottom-nav .nav-item{min-width:0;flex:1;height:51px;gap:4px;color:#7b6e66}
