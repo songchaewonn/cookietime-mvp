@@ -101,6 +101,10 @@ function loadExistingApp() {
   const window = { CookieTowerIntegration: Integration, CookieTowerCore: Core, addEventListener() {}, dispatchEvent() {}, scrollTo() {} };
   const context = vm.createContext({ window, Date: FakeDate, document: { querySelector: () => node, querySelectorAll: () => [], addEventListener() {}, visibilityState: 'visible' }, localStorage: { getItem: key => values.get(key) || null, setItem: (key, value) => values.set(key, value) }, sessionStorage: { getItem: () => null, setItem() {} }, navigator: {}, crypto: globalThis.crypto, structuredClone, console, CustomEvent: class {}, setInterval(callback, ms) { intervals.push({ callback, ms }); return intervals.length; }, clearInterval() {}, setTimeout() {}, clearTimeout() {} });
   const root = path.resolve(__dirname, '..');
+  // Run the adapter on the same fake clock as the app, rather than the host clock.
+  vm.runInContext(fs.readFileSync(path.join(__dirname, 'tower-core.js'), 'utf8'), context);
+  vm.runInContext(fs.readFileSync(path.join(__dirname, 'tower-integration.js'), 'utf8'), context);
+  vm.runInContext('window.CookieTowerCore=CookieTowerCore;window.CookieTowerIntegration=CookieTowerIntegration;', context);
   let source = fs.readFileSync(path.join(root, 'app.js'), 'utf8');
   source = source.replace('timer=setInterval(pulse,1000);render();syncNativeState();', 'timer=setInterval(pulse,1000);syncNativeState();');
   vm.runInContext(source, context);
