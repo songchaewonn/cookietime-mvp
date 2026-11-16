@@ -88,61 +88,74 @@
     return onTime || (hasActivity && deviationOk) || hasCookie;
   };
 
-  schedulePage = function () {
-    const shift = new Date(today);
-    shift.setDate(today.getDate() + weekOffset * 7);
-    const weekStart = new Date(shift);
-    weekStart.setDate(shift.getDate() - shift.getDay());
-    const days = Array.from({ length: 7 }, (_, i) => new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate() + i));
-    const dayDate = days[selectedDay];
-    const classes = state.classes.filter(item => item.day === selectedDay).sort((a, b) => a.start.localeCompare(b.start));
+  let scheduleViewMode = 'month';
+  let scheduleSelectedDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+  function scheduleDayMarkup(dayDate) {
+    const classes = state.classes.filter(item => item.day === dayDate.getDay()).sort((a, b) => a.start.localeCompare(b.start));
     const minGap = Number(state.settings.gapMinutes ?? 30);
     const dayIsToday = dayKey(dayDate) === dayKey();
-
-    function timeOnDay(text) {
+    const timeOnDay = text => {
       const date = new Date(dayDate);
       date.setHours(Number(text.slice(0, 2)), Number(text.slice(3, 5)), 0, 0);
       return date;
-    }
-
+    };
     function intervalMarkup(from, to, kind) {
       const span = (timeOnDay(to) - timeOnDay(from)) / 60000;
       if (span < 10) return '';
       const startAt = timeOnDay(from), endAt = timeOnDay(to);
-      const now = dayIsToday ? Date.now() : startAt.getTime();
-      const effectiveStart = new Date(Math.max(startAt.getTime(), now));
+      const effectiveStart = new Date(Math.max(startAt.getTime(), dayIsToday ? Date.now() : startAt.getTime()));
       const remaining = Math.floor((endAt.getTime() - effectiveStart.getTime()) / 60000);
       const length = span >= 60 ? `${Math.floor(span / 60)}시간${span % 60 ? ` ${span % 60}분` : ''}` : `${span}분`;
       const title = kind === 'after' ? '수업 후 시간' : span >= minGap ? '공강' : '짧은 틈새';
       const past = dayIsToday && remaining < 10;
       const slot = `<div class="free-slot"><span>☕ ${title}</span><span>${from} — ${to}${past ? ' · 지난 시간' : ` · ${length}`}</span></div>`;
       if (past) return slot;
-
       const size = remaining < 30 ? 'short' : remaining < 60 ? 'medium' : 'long';
       const labels = { short: '짧게 복습·암기', medium: '과제 한 단계 진행', long: '과제 집중과 휴식' };
       const task = nextSuggestedTask();
       const suggestion = getMajorGapSuggestion(state.settings.major, size, dayKey(dayDate));
-      const startValue = localDate(effectiveStart);
-      const endValue = localDate(endAt);
+      const startValue = localDate(effectiveStart), endValue = localDate(endAt);
       const accepted = state.tasks.some(item => !item.done && item.start === startValue && (item.id === task?.id || item.memo === '시간표 공강 추천으로 추가됨'));
-      const copy = task
-        ? `${esc(task.title)}을(를) ${Math.min(remaining, Math.max(15, (task.hours || 1) * 30))}분 진행해보세요.`
-        : `${suggestion.title} · ${suggestion.detail}`;
+      const copy = task ? `${esc(task.title)}을(를) ${Math.min(remaining, Math.max(15, (task.hours || 1) * 30))}분 진행해보세요.` : `${suggestion.title} · ${suggestion.detail}`;
       const basis = task ? '마감이 가까운 할 일을 먼저 추천해요.' : state.settings.major
         ? `${esc(state.settings.major)} 전공 분야별 추천 예시예요. 저장된 학생 데이터는 사용하지 않아요.`
         : 'MY에서 전공을 입력하면 전공 분야별 추천을 보여드려요.';
       return `${slot}<section class="recommend-card"><div class="recommend-heading"><span class="recommend-icon">✦</span><strong>${kind === 'after' ? '수업 후 추천' : labels[size]}</strong></div><p>${copy}${size === 'long' ? ' 중간에 짧게 쉬어가세요.' : ''}</p><small class="eyebrow">${basis}</small><button class="button secondary" data-gap-start="${startValue}" data-gap-end="${endValue}" data-gap-task="${task?.id || ''}" data-gap-size="${size}" ${accepted ? 'disabled' : ''}>${accepted ? '시작 예약됨' : '이 시간에 시작 예약'}</button></section>`;
     }
-
     let rows = '';
     for (let i = 0; i < classes.length; i++) {
       const item = classes[i];
       if (i > 0) rows += intervalMarkup(classes[i - 1].end, item.start, 'gap');
       rows += `<div class="schedule-row"><div class="schedule-time">${item.start}</div><div class="schedule-block ${i % 3 === 1 ? 'green' : i % 3 === 2 ? 'blue' : ''}"><strong>${esc(item.title)}</strong><small>${item.start} — ${item.end}&nbsp;${esc(item.room || '강의실 미정')}</small><div class="class-actions"><button class="text-link" data-edit-class="${item.id}">수정</button><button class="text-link" data-delete-class="${item.id}">삭제</button></div></div></div>`;
     }
-    if (classes.length && classes.at(-1).end < '23:00') rows += intervalMarkup(classes.at(-1).end, '23:00', 'after');
+    if (classes.length && classes.at(-1).end < '24:00') rows += intervalMarkup(classes.at(-1).end, '24:00', 'after');
+    const heading = `<div class="section-head" style="margin-top:8px"><h2>${dayDate.getMonth() + 1}월 ${dayDate.getDate()}일 ${dayLabel(dayDate.getDay())} 일정</h2><span class="eyebrow">${classes.length}개 수업</span></div>`;
+    return `${heading}${classes.length ? `<div class="schedule-list">${rows}</div>` : '<div class="card week-empty">아직 등록된 수업이 없어요.<br/>수업을 추가하면 수업 사이 시간을 함께 보여드릴게요.</div>'}`;
+  }
 
-    return `<div class="page-heading"><div><div class="eyebrow">나의 한 주</div><h1 class="page-title">시간표</h1></div><button class="button" data-modal="class">＋ 수업 추가</button></div><div class="week-switch"><button data-week="-1">‹</button><span>${days[0].getMonth() + 1}월 ${days[0].getDate()}일 — ${days[6].getMonth() + 1}월 ${days[6].getDate()}일</span><button data-week="1">›</button></div><div class="day-strip">${days.map((date, i) => `<button class="day-chip ${selectedDay === i ? 'selected' : ''}" data-day="${i}">${weekdays[i]}<b>${date.getDate()}</b></button>`).join('')}</div><div class="section-head" style="margin-top:2px"><h3>${dayLabel(selectedDay)} 일정</h3><span class="eyebrow">${classes.length}개 수업</span></div>${classes.length ? `<div class="schedule-list">${rows}</div>` : '<div class="card week-empty">아직 등록된 수업이 없어요.<br/>수업을 추가하면 수업 사이 시간을 함께 보여드릴게요.</div>'}<div class="notice">첫 수업 전 시간은 공강으로 표시하지 않아요. 마지막 수업 이후는 ‘수업 후 시간’으로 구분해요.</div>`;
+  schedulePage = function () {
+    const monthStart = new Date(scheduleSelectedDate.getFullYear(), scheduleSelectedDate.getMonth(), 1);
+    const monthLength = new Date(scheduleSelectedDate.getFullYear(), scheduleSelectedDate.getMonth() + 1, 0).getDate();
+    const cells = [...Array(monthStart.getDay()).fill('<span class="month-day-empty"></span>')];
+    for (let day = 1; day <= monthLength; day++) {
+      const date = new Date(monthStart.getFullYear(), monthStart.getMonth(), day);
+      const classCount = state.classes.filter(item => item.day === date.getDay()).length;
+      const selected = day === scheduleSelectedDate.getDate();
+      cells.push(`<button class="month-day ${dayKey(date) === dayKey() ? 'today' : ''} ${selected ? 'selected' : ''}" data-sched-date="${day}" aria-label="${date.getMonth() + 1}월 ${day}일, 수업 ${classCount}개">${day}${classCount ? `<span class="month-day-dots" aria-hidden="true">${Array.from({ length: Math.min(3, classCount) }, () => '<i></i>').join('')}</span>` : ''}</button>`);
+    }
+    const month = scheduleSelectedDate.getMonth() + 1, year = scheduleSelectedDate.getFullYear();
+    const toggle = `<div class="schedule-view-toggle" role="group" aria-label="시간표 보기 방식"><button type="button" data-sched-view="week" class="${scheduleViewMode === 'week' ? 'active' : ''}">주별</button><button type="button" data-sched-view="month" class="${scheduleViewMode === 'month' ? 'active' : ''}">월별</button></div>`;
+    let content;
+    if (scheduleViewMode === 'month') {
+      content = `<div class="chagok-month-head"><h1>${year}년 ${month}월</h1><button data-sched-month="-1" aria-label="이전 달">‹</button><button data-sched-month="1" aria-label="다음 달">›</button>${toggle}<button class="month-add" data-modal="class" aria-label="수업 추가">＋</button></div><section class="month-calendar"><div class="month-week">${weekdays.map((weekday, i) => `<b class="${i === 0 ? 'sunday' : ''}">${weekday}</b>`).join('')}</div><div class="month-days">${cells.join('')}</div></section>${scheduleDayMarkup(scheduleSelectedDate)}`;
+    } else {
+      const weekStart = new Date(scheduleSelectedDate);
+      weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+      const days = Array.from({ length: 7 }, (_, i) => new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate() + i));
+      content = `<div class="page-heading"><div><div class="eyebrow">시간표</div><h1 class="page-title">주별 일정</h1></div><button class="button" data-modal="class">＋ 수업 추가</button></div><div class="week-switch"><button data-sched-week="-1" aria-label="이전 주">‹</button><span>${days[0].getMonth() + 1}월 ${days[0].getDate()}일 — ${days[6].getMonth() + 1}월 ${days[6].getDate()}일</span><button data-sched-week="1" aria-label="다음 주">›</button>${toggle}</div><div class="day-strip">${days.map(date => `<button class="day-chip ${dayKey(date) === dayKey(scheduleSelectedDate) ? 'selected' : ''}" data-sched-date-full="${date.toISOString()}">${weekdays[date.getDay()]}<b>${date.getDate()}</b></button>`).join('')}</div>${scheduleDayMarkup(scheduleSelectedDate)}`;
+    }
+    return content;
   };
 
   function timeLabel(at) {
@@ -161,35 +174,65 @@
     root.querySelector('[data-close]').onclick = () => { root.innerHTML = ''; };
   }
 
+  function openLcdTimerSettings() {
+    const root = document.querySelector('#modal-root');
+    const minutes = Math.min(600, Math.max(1, Number(state.settings.focusTimerMinutes) || 25));
+    const clock = value => `${String(Math.floor(value / 60)).padStart(2, '0')}:${String(value % 60).padStart(2, '0')}`;
+    root.innerHTML = `<div class="modal-backdrop"><section class="modal lcd-timer-settings" role="dialog" aria-modal="true" aria-labelledby="lcd-timer-title"><div class="modal-top"><h2 id="lcd-timer-title">LCD 타이머 집중 시간</h2><button type="button" class="close" data-lcd-cancel aria-label="닫기">×</button></div><p class="page-subtitle">설정한 시간이 LCD 타이머에 표시돼요.</p><div class="lcd-timer-preview"><small>집중 타이머</small><strong id="lcd-timer-preview">${clock(minutes)}</strong></div><form id="lcd-timer-form"><label class="field-label" for="lcd-timer-minutes">집중 시간 (분)</label><input class="input" id="lcd-timer-minutes" type="number" min="1" max="600" step="1" value="${minutes}" required/><div class="modal-actions"><button type="button" class="button ghost" data-lcd-cancel>취소</button><button class="button" type="submit">LCD 타이머에 적용</button></div></form></section></div>`;
+    const input = root.querySelector('#lcd-timer-minutes');
+    input.addEventListener('input', () => {
+      const value = Math.min(600, Math.max(1, Number(input.value) || 1));
+      root.querySelector('#lcd-timer-preview').textContent = clock(value);
+    });
+    root.querySelectorAll('[data-lcd-cancel]').forEach(button => button.addEventListener('click', () => root.replaceChildren()));
+    root.querySelector('#lcd-timer-form').addEventListener('submit', event => {
+      event.preventDefault();
+      state.settings.focusMode = 'timer';
+      state.settings.focusTimerMinutes = Math.min(600, Math.max(1, Number(input.value) || 25));
+      save(); root.replaceChildren(); showToast('LCD 타이머 집중 시간을 저장했어요.');
+    });
+  }
+
   const originalRender = render;
   render = function (...args) {
     const result = originalRender.apply(this, args);
     updateNotificationBadge();
+    if (page === 'home') document.querySelector('#app [data-focus-timer-settings]')?.addEventListener('click', openLcdTimerSettings);
     if (page === 'settings' && state.settings.onboardingDone) {
       const root = document.querySelector('#app');
       const children = [...root.children];
-      const header = children.slice(0, 3);
-      const rest = children.slice(3);
+      const heading = children.filter(node => node.matches?.('.page-title, .page-subtitle'));
+      const rest = children.filter(node => !heading.includes(node) && !node.matches?.('.my-profile-card, .profile-login-link') && !(node.matches?.('.eyebrow') && node.textContent.includes('나에게 맞게 설정하기')) && !(node.matches?.('p') && node.textContent.includes('CookieTime MVP')));
+      children.find(node => node.matches?.('.eyebrow') && node.textContent.includes('나에게 맞게 설정하기'))?.remove();
+      children.filter(node => node.matches?.('.my-profile-card, .profile-login-link')).forEach(node => node.remove());
       const legacySettings = rest.find(node => node.classList?.contains('card') && node.textContent.includes('스트릭 기준'));
       legacySettings?.querySelectorAll('label').forEach(label => { if (label.textContent.includes('수업 종료 알림')) label.remove(); });
-      const panelNodes = rest.filter(node => !(node.textContent?.includes('CookieTime MVP') && node.tagName === 'P'));
-      const profile = document.createElement('section');
-      profile.className = 'settings-profile-card';
-      profile.innerHTML = `<span class="settings-avatar" aria-hidden="true">🍪</span><span><strong>${esc(window.CookieAuth?.currentUser?.displayName || '김쿠키')}</strong><small>${esc(state.settings.major || '전공을 설정해 주세요')}</small></span><button type="button" data-settings-edit>편집</button>`;
       const toggle = document.createElement('button');
       toggle.type = 'button'; toggle.className = 'button settings-edit-toggle';
-      toggle.textContent = editingSettings ? '설정 편집 완료' : '나에게 맞게 설정하기';
+      toggle.textContent = editingSettings ? '설정 편집 완료' : '설정 편집';
       const panel = document.createElement('div'); panel.className = 'settings-edit-panel'; panel.hidden = !editingSettings;
-      panelNodes.forEach(node => panel.append(node));
+      rest.forEach(node => panel.append(node));
       const streak = panel.querySelector('#streak-criterion');
       if (streak) {
         const any = streak.querySelector('option[value="any"]');
         if (any) any.textContent = '세 조건 중 하나';
         if (!streak.querySelector('option[value="cookie"]')) streak.insertAdjacentHTML('beforeend', `<option value="cookie" ${state.settings.streakCriterion === 'cookie' ? 'selected' : ''}>쿠키 1개 이상 쌓기</option>`);
       }
-      root.replaceChildren(...header, profile, toggle, panel);
+      root.replaceChildren(...heading, toggle, panel);
       toggle.onclick = () => { editingSettings = !editingSettings; render(); };
-      profile.querySelector('[data-settings-edit]').onclick = () => { editingSettings = true; render(); };
+    }
+    if (page === 'schedule') {
+      const scheduleRoot = document.querySelector('#app');
+      scheduleRoot.querySelectorAll('[data-sched-view]').forEach(button => button.addEventListener('click', () => { scheduleViewMode = button.dataset.schedView; render(); }));
+      scheduleRoot.querySelectorAll('[data-sched-month]').forEach(button => button.addEventListener('click', () => {
+        const day = scheduleSelectedDate.getDate();
+        const next = new Date(scheduleSelectedDate.getFullYear(), scheduleSelectedDate.getMonth() + Number(button.dataset.schedMonth), 1);
+        scheduleSelectedDate = new Date(next.getFullYear(), next.getMonth(), Math.min(day, new Date(next.getFullYear(), next.getMonth() + 1, 0).getDate()));
+        render();
+      }));
+      scheduleRoot.querySelectorAll('[data-sched-date]').forEach(button => button.addEventListener('click', () => { scheduleSelectedDate = new Date(scheduleSelectedDate.getFullYear(), scheduleSelectedDate.getMonth(), Number(button.dataset.schedDate)); render(); }));
+      scheduleRoot.querySelectorAll('[data-sched-date-full]').forEach(button => button.addEventListener('click', () => { scheduleSelectedDate = new Date(button.dataset.schedDateFull); render(); }));
+      scheduleRoot.querySelectorAll('[data-sched-week]').forEach(button => button.addEventListener('click', () => { scheduleSelectedDate.setDate(scheduleSelectedDate.getDate() + Number(button.dataset.schedWeek) * 7); render(); }));
     }
     return result;
   };
