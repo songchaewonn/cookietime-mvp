@@ -3,6 +3,7 @@
   'use strict';
 
   let editingSettings = false;
+  let settingsCategory = 'all';
   state.notifications = Array.isArray(state.notifications) ? state.notifications : [];
 
   function updateNotificationBadge() {
@@ -198,6 +199,45 @@
     });
   }
 
+  function settingsCategoryForHeading(text) {
+    if (text.includes('집중을 방해')) return 'apps';
+    if (text.includes('알림과 캐릭터')) return 'character';
+    if (text.includes('알림')) return 'alerts';
+    if (text.includes('캐릭터') || text.includes('진동')) return 'character';
+    if (text.includes('권한')) return 'permissions';
+    if (text.includes('시간표') || text.includes('전공 맞춤')) return 'schedule';
+    return 'focus';
+  }
+
+  function settingsSummaryMarkup() {
+    const criterionLabels = { onTime: '예정 시간에 과제 시작', deviation: '이탈 목표 지키기', cookie: '쿠키 1개 이상 쌓기', any: '세 조건 중 하나' };
+    const blockedLabels = (state.blocked || []).map(app => window.NativeMvp?.appLabel?.(app) || app);
+    const blockedModes = { focus: '집중 중에만', always: '항상', schedule: '요일·시간 지정' };
+    const leads = [...(state.settings.countdownLeads || [])].sort((a, b) => b - a).join('·');
+    const reminders = [state.settings.reminder24h ? '1일 전' : '', state.settings.reminder3h ? '3시간 전' : ''].filter(Boolean).join(' · ') || '꺼짐';
+    const permissionChecks = [
+      window.NativeMvp?.hasUsageAccess?.(), window.NativeMvp?.hasOverlayPermission?.(),
+      window.NativeMvp?.hasNotificationPermission?.(), window.NativeMvp?.hasExactAlarmPermission?.()
+    ];
+    const granted = permissionChecks.filter(value => value === true).length;
+    const permissionSummary = permissionChecks.some(value => typeof value === 'boolean') ? `${granted}개 허용됨 · ${permissionChecks.filter(value => value === false).length}개 확인 필요` : '기기에서 권한 상태를 확인해요';
+    const items = [
+      ['focus', '♨', '집중 · 스트릭', `${criterionLabels[state.settings.streakCriterion || 'any']} · 이탈 목표 ${state.settings.dailyDeviationGoalMinutes ?? 60}분`],
+      ['apps', '⊘', '방해 앱 관리', `${blockedLabels.length ? blockedLabels.join(', ') : '선택한 앱 없음'} · ${blockedModes[state.settings.blockedMode] || '집중 중에만'}`],
+      ['alerts', '♧', '알림', `시작 ${leads ? `${leads}분` : '알림 없음'} · 마감 ${reminders}`],
+      ['character', '☻', '캐릭터', `말풍선 ${state.settings.character ? '켜짐' : '꺼짐'} · 진동 ${state.settings.vibration ? '켜짐' : '꺼짐'}`],
+      ['permissions', '⬡', '권한', permissionSummary],
+      ['schedule', '▦', '시간표 · 전공 추천', `공강 ${state.settings.gapMinutes}분부터 · ${state.settings.major || '전공 미설정'}`]
+    ];
+    return `<section class="my-category-section"><h2>설정</h2><div class="my-category-card">${items.map(([key, icon, title, detail]) => `<button class="my-category-row" type="button" data-my-setting="${key}"><span class="my-category-icon" aria-hidden="true">${icon}</span><span class="my-category-copy"><strong>${title}</strong><small>${esc(detail)}</small></span><span class="my-category-chevron" aria-hidden="true">›</span></button>`).join('')}</div></section>`;
+  }
+
+  function openMyAppInfo() {
+    const root = document.querySelector('#modal-root');
+    root.innerHTML = `<div class="modal-backdrop"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="my-app-info-title"><div class="modal-top"><h2 id="my-app-info-title">앱 정보</h2><button class="close" data-close aria-label="닫기">×</button></div><div class="card my-app-info-card"><strong>CookieTime MVP</strong><p>버전 v1.2.4</p><small>시간표와 집중 기록은 이 기기에 저장됩니다.</small></div></section></div>`;
+    root.querySelector('[data-close]').onclick = () => root.replaceChildren();
+  }
+
   const originalRender = render;
   render = function (...args) {
     const result = originalRender.apply(this, args);
@@ -206,25 +246,46 @@
     if (page === 'settings' && state.settings.onboardingDone) {
       const root = document.querySelector('#app');
       const children = [...root.children];
-      const heading = children.filter(node => node.matches?.('.page-title, .page-subtitle'));
-      const rest = children.filter(node => !heading.includes(node) && !node.matches?.('.my-profile-card, .profile-login-link') && !(node.matches?.('.eyebrow') && node.textContent.includes('나에게 맞게 설정하기')) && !(node.matches?.('p') && node.textContent.includes('CookieTime MVP')));
+      const profile = children.find(node => node.matches?.('.my-profile-card'));
+      const login = children.find(node => node.matches?.('.profile-login-link'));
+      const title = children.find(node => node.matches?.('.page-title'));
+      const rest = children.filter(node => !node.matches?.('.my-profile-card, .profile-login-link, .page-title, .page-subtitle, .eyebrow') && !(node.matches?.('p') && node.textContent.includes('CookieTime MVP')));
       children.find(node => node.matches?.('.eyebrow') && node.textContent.includes('나에게 맞게 설정하기'))?.remove();
-      children.filter(node => node.matches?.('.my-profile-card, .profile-login-link')).forEach(node => node.remove());
+      title?.remove();
       const legacySettings = rest.find(node => node.classList?.contains('card') && node.textContent.includes('스트릭 기준'));
       legacySettings?.querySelectorAll('label').forEach(label => { if (label.textContent.includes('수업 종료 알림')) label.remove(); });
       const toggle = document.createElement('button');
       toggle.type = 'button'; toggle.className = 'button settings-edit-toggle';
-      toggle.textContent = editingSettings ? '설정 편집 완료' : '설정 편집';
+      toggle.textContent = editingSettings ? '설정 편집 닫기' : '설정 편집';
       const panel = document.createElement('div'); panel.className = 'settings-edit-panel'; panel.hidden = !editingSettings;
-      rest.forEach(node => panel.append(node));
+      let activeCategory = 'focus';
+      rest.forEach(node => {
+        if (node.matches?.('.section-head')) activeCategory = settingsCategoryForHeading(node.textContent || '');
+        else if (node.classList?.contains('card') && node.textContent.includes('스트릭 기준')) activeCategory = 'focus';
+        node.dataset.mySettingsCategory = activeCategory;
+        if (editingSettings && (settingsCategory === 'all' || settingsCategory === activeCategory)) panel.append(node);
+      });
       const streak = panel.querySelector('#streak-criterion');
       if (streak) {
         const any = streak.querySelector('option[value="any"]');
         if (any) any.textContent = '세 조건 중 하나';
         if (!streak.querySelector('option[value="cookie"]')) streak.insertAdjacentHTML('beforeend', `<option value="cookie" ${state.settings.streakCriterion === 'cookie' ? 'selected' : ''}>쿠키 1개 이상 쌓기</option>`);
       }
-      root.replaceChildren(...heading, toggle, panel);
-      toggle.onclick = () => { editingSettings = !editingSettings; render(); };
+      const category = document.createElement('div'); category.innerHTML = settingsSummaryMarkup();
+      const utilities = document.createElement('section'); utilities.className = 'my-account-links';
+      utilities.innerHTML = `<a class="my-account-link" href="https://github.com/songchaewonn/cookietime-mvp/issues" target="_blank" rel="noreferrer"><strong>문의하기</strong><span aria-hidden="true">›</span></a><button type="button" class="my-account-link" data-my-app-info><strong>앱 정보 <small>v1.2.4</small></strong><span aria-hidden="true">›</span></button><button type="button" class="my-account-link my-logout" data-my-logout><strong>로그아웃</strong></button></section>`;
+      root.replaceChildren(...[profile, login, category.firstElementChild, toggle, panel, utilities].filter(Boolean));
+      toggle.onclick = () => { editingSettings = !editingSettings; settingsCategory = 'all'; render(); };
+      root.querySelectorAll('[data-my-setting]').forEach(button => button.onclick = () => {
+        settingsCategory = button.dataset.mySetting; editingSettings = true; render();
+        document.querySelector('#app .settings-edit-panel:not([hidden])')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      root.querySelector('[data-my-app-info]')?.addEventListener('click', openMyAppInfo);
+      root.querySelector('[data-my-logout]')?.addEventListener('click', async () => {
+        if (!authUser) { showToast('로그인되어 있지 않아요.'); return; }
+        try { await window.CookieAuth?.signOut?.(); authUser = null; render(); showToast('로그아웃했어요.'); }
+        catch { showToast('로그아웃하지 못했어요. 다시 시도해주세요.'); }
+      });
     }
     if (page === 'schedule') {
       const scheduleRoot = document.querySelector('#app');

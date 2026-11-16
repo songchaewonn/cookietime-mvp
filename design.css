@@ -134,6 +134,7 @@
 .game-target{gap:8px;margin:20px 0 20px}
 .game-target-label{font:14px/1.2 var(--font);letter-spacing:.25px;color:#806d5e}
 .game-instruction{min-width:0;width:max-content;max-width:100%;padding:9px 18px;border:1.5px solid #ead9c5;border-radius:23px;background:#fffdfa;box-shadow:0 2px 3px #593a1c0d;color:#38251b;font:22px/1.35 var(--font);white-space:nowrap}
+.game-instruction:empty{visibility:hidden;min-height:48px;padding-top:0;padding-bottom:0;border-color:transparent;background:transparent;box-shadow:none}
 .game-feedback{margin:0;text-align:center;color:#c8774e;font-size:12px}
 .game-timer-row{margin:0 2px 8px;color:#806d5e;font:14px var(--font)}
 .game-timer-row strong{color:#df5c23;font:700 18px var(--display);font-variant-numeric:tabular-nums}

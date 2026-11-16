@@ -5,6 +5,9 @@ const originalRender = render;
 const originalFocusAction = focusAction;
 let cookieUiTick = null;
 let designLastPage=page;
+const routePages=new Set(['home','schedule','stats','settings','tasks','game','focus']);
+const requestedRoute=location.hash.slice(1);
+if(routePages.has(requestedRoute))page=requestedRoute;
 
 function designOnboardingPage(){
   const icons={usage:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18V9m5 9V5m5 13v-6m5 6V3"/><path d="m3 7 5-4 5 5 7-6"/></svg>',overlay:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 5-8 5-8-5 8-5Z"/><path d="m4 12 8 5 8-5M4 16l8 5 8-5"/></svg>',notice:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg>',alarm:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 8v5l3 2M5 3 2 6m17-3 3 3"/></svg>',lock:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2"/></svg>'};
@@ -79,6 +82,7 @@ async function shareCookieTower(){
 
 function designRender(){
   if(page!==designLastPage){designLastPage=page;window.scrollTo(0,0)}
+  document.querySelectorAll('.bottom-nav .nav-item').forEach(item=>item.classList.toggle('active',item.dataset.page===page));
   if(page==='focusDone'){
     const root=document.querySelector('#app');root.innerHTML=focusCompletePage();bindCommon();
     root.querySelector('[data-unload-cookie]')?.addEventListener('click',()=>{showToast('이번 집중을 기록했어요. 완성한 1시간마다 타워에 쿠키가 쌓여요.');go('stats')});
@@ -147,8 +151,9 @@ document.addEventListener('click',event=>{
 
 document.addEventListener('DOMContentLoaded',()=>{
   const nav=document.querySelector('.bottom-nav');
-  if(nav){nav.innerHTML=`<button data-page="home" class="nav-item active"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z"/></svg><small>홈</small></button><button data-page="schedule" class="nav-item"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18M7 14h2m3 0h2m3 0h1M7 17h2m3 0h2"/></svg><small>시간표</small></button><button data-page="stats" class="nav-item"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V11h4v9Zm6 0V5h4v15Zm6 0V2h4v18Z"/></svg><small>기록</small></button><button data-page="settings" class="nav-item"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="4"/><path d="M4 21a8 8 0 0 1 16 0Z"/></svg><small>MY</small></button>`;nav.querySelectorAll('.nav-item').forEach(button=>button.addEventListener('click',()=>{page=button.dataset.page;render();nav.querySelectorAll('.nav-item').forEach(item=>item.classList.toggle('active',item===button))}))}
-  document.querySelector('.brand')?.addEventListener('click',event=>{event.preventDefault();page='home';render()});
+  if(nav){nav.innerHTML=`<button data-page="home" class="nav-item active"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z"/></svg><small>홈</small></button><button data-page="schedule" class="nav-item"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18M7 14h2m3 0h2m3 0h1M7 17h2m3 0h2"/></svg><small>시간표</small></button><button data-page="stats" class="nav-item"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V11h4v9Zm6 0V5h4v15Zm6 0V2h4v18Z"/></svg><small>기록</small></button><button data-page="settings" class="nav-item"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="4"/><path d="M4 21a8 8 0 0 1 16 0Z"/></svg><small>MY</small></button>`;nav.querySelectorAll('.nav-item').forEach(item=>item.classList.toggle('active',item.dataset.page===page));nav.querySelectorAll('.nav-item').forEach(button=>button.addEventListener('click',()=>{page=button.dataset.page;if(location.hash!==`#${page}`)location.hash=page;render()}))}
+  window.addEventListener('hashchange',()=>{const next=location.hash.slice(1);if(routePages.has(next)&&next!==page){page=next;render()}});
+  document.querySelector('.brand')?.addEventListener('click',event=>{event.preventDefault();page='home';if(location.hash!=='#home')location.hash='home';render()});
 });
 
 render();
