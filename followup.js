@@ -2,6 +2,7 @@
 (function () {
   'use strict';
 
+  const APP_VERSION = '1.2.5';
   let editingSettings = false;
   let settingsCategory = 'all';
   state.notifications = Array.isArray(state.notifications) ? state.notifications : [];
@@ -234,7 +235,7 @@
 
   function openMyAppInfo() {
     const root = document.querySelector('#modal-root');
-    root.innerHTML = `<div class="modal-backdrop"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="my-app-info-title"><div class="modal-top"><h2 id="my-app-info-title">앱 정보</h2><button class="close" data-close aria-label="닫기">×</button></div><div class="card my-app-info-card"><strong>CookieTime MVP</strong><p>버전 v1.2.4</p><small>시간표와 집중 기록은 이 기기에 저장됩니다.</small></div></section></div>`;
+    root.innerHTML = `<div class="modal-backdrop"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="my-app-info-title"><div class="modal-top"><h2 id="my-app-info-title">앱 정보</h2><button class="close" data-close aria-label="닫기">×</button></div><div class="card my-app-info-card"><strong>차곡</strong><p>버전 v${APP_VERSION}</p><small>시간표와 집중 기록은 이 기기에 저장됩니다.</small></div></section></div>`;
     root.querySelector('[data-close]').onclick = () => root.replaceChildren();
   }
 
@@ -273,7 +274,7 @@
       }
       const category = document.createElement('div'); category.innerHTML = settingsSummaryMarkup();
       const utilities = document.createElement('section'); utilities.className = 'my-account-links';
-      utilities.innerHTML = `<a class="my-account-link" href="https://github.com/songchaewonn/cookietime-mvp/issues" target="_blank" rel="noreferrer"><strong>문의하기</strong><span aria-hidden="true">›</span></a><button type="button" class="my-account-link" data-my-app-info><strong>앱 정보 <small>v1.2.4</small></strong><span aria-hidden="true">›</span></button><button type="button" class="my-account-link my-logout" data-my-logout><strong>로그아웃</strong></button></section>`;
+      utilities.innerHTML = `<button type="button" class="my-account-link" data-my-app-info><strong>앱 정보 <small>v${APP_VERSION}</small></strong><span aria-hidden="true">›</span></button><button type="button" class="my-account-link my-logout" data-my-logout><strong>로그아웃</strong></button></section>`;
       root.replaceChildren(...[profile, login, category.firstElementChild, toggle, panel, utilities].filter(Boolean));
       toggle.onclick = () => { editingSettings = !editingSettings; settingsCategory = 'all'; render(); };
       root.querySelectorAll('[data-my-setting]').forEach(button => button.onclick = () => {

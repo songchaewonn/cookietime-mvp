@@ -101,8 +101,7 @@ function designRender(){
   if(page==='stats'&&root.firstElementChild?.classList.contains('notice'))root.firstElementChild.remove();
   if(page==='settings'){
     const name=authUser?.displayName||'김쿠키';
-    const profile=document.createElement('section');profile.className='my-profile-card';profile.innerHTML=`<span>🍪</span><div><strong>${esc(name)}</strong><small>${esc(state.settings.major||'전공을 설정해 주세요')}</small></div><button data-profile-edit>편집</button>`;root.prepend(profile);if(!authUser){const login=document.createElement('button');login.className='profile-login-link';login.textContent='간편 로그인';login.addEventListener('click',openAccountModal);profile.after(login)}
-    profile.querySelector('[data-profile-edit]')?.addEventListener('click',()=>{const major=prompt('전공을 입력해주세요.',state.settings.major||'');if(major!==null){state.settings.major=major.trim();save();render()}});
+    const profile=document.createElement('section');profile.className='my-profile-card';profile.innerHTML=`<span>🍪</span><div><strong>${esc(name)}</strong><small>${esc(state.settings.major||'전공을 설정해 주세요')}</small></div>`;root.prepend(profile);if(!authUser){const login=document.createElement('button');login.className='profile-login-link';login.textContent='간편 로그인';login.addEventListener('click',openAccountModal);profile.after(login)}
     const title=root.querySelector('.page-title');if(title)title.textContent='MY';
   }
   root.querySelectorAll('[data-go="focus"]').forEach(button=>button.addEventListener('click',()=>{if(!state.focus.active)focusAction('start-focus')}));
