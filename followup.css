@@ -13,14 +13,25 @@
 .notification-history-item small{display:block;margin-top:5px;color:#938377}
 .oven-window img{filter:drop-shadow(0 0 11px #ff5b2d) drop-shadow(0 3px 5px #f23b1c88) saturate(1.12)}
 .app-shell:has(.integrated-tower)>.topbar .brand,.app-shell:has(.integrated-tower)>.topbar .topbar-actions{transform:translateY(9px)}
-.app-shell:has(.integrated-tower)>.bottom-nav{width:min(480px,100%);height:82px;bottom:20px;margin-bottom:8px;border:1px solid #eee5d8;border-radius:30px;background:#faf6ef;padding:8px 12px max(9px,env(safe-area-inset-bottom));box-shadow:0 5px 15px #44311e18;backdrop-filter:none}
+.app-shell:has(.integrated-tower)>.bottom-nav{width:min(390px,100%);height:82px;bottom:20px;margin-bottom:8px;border:1px solid #eee5d8;border-radius:30px;background:#faf6ef;padding:8px 12px max(9px,env(safe-area-inset-bottom));box-shadow:0 5px 15px #44311e18;backdrop-filter:none}
 .app-shell:has(.integrated-tower)>.bottom-nav .nav-item{height:auto;gap:initial;color:#8b7c72}
 .app-shell:has(.integrated-tower)>.bottom-nav .nav-item.active{color:var(--choco)}
 .app-shell:has(.integrated-tower)>.bottom-nav small{font:inherit;font-size:10px}
 .schedule-view-toggle{display:inline-flex;align-items:center;gap:2px;padding:3px;border-radius:999px;background:#f4eee6;white-space:nowrap}
 .schedule-view-toggle button{min-width:42px;padding:6px 9px;border:0;border-radius:999px;background:transparent;color:#927d6d;font:12px var(--font)}
 .schedule-view-toggle button.active{background:#fff;color:#573b2d;box-shadow:0 1px 4px #402b2018}
+.schedule-calendar-header{margin:15px 0 16px}
+.schedule-calendar-title{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.schedule-calendar-title h1{min-width:0;margin:0;color:var(--choco);font:24px/1.2 var(--display);letter-spacing:-.45px;white-space:nowrap}
+.schedule-calendar-title .month-add{flex:none;width:48px;height:48px;border:0;border-radius:50%;background:#f4bd73;color:var(--choco);font-size:27px;line-height:1}
+.schedule-calendar-controls{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px}
+.schedule-range{min-width:0;display:flex;align-items:center;gap:8px;color:#8b786a;font-size:13px}
+.schedule-range button{flex:none;width:26px;height:30px;border:0;background:transparent;color:#8b786a;font-size:20px}
+.schedule-range span{white-space:nowrap}
+.schedule-calendar-header+.month-calendar{margin-top:0}
+.schedule-date-prompt{margin:18px 0;text-align:center;color:#938377;font-size:13px}
+.schedule-calendar-header+.day-strip{margin:15px 0 19px}
 .lcd-timer-preview{display:grid;justify-items:center;gap:5px;margin:18px 0;padding:16px;border-radius:18px;background:#3c291e;color:#fff5e9}
 .lcd-timer-preview small{color:#d9c7b7;font-size:12px}
 .lcd-timer-preview strong{font:700 36px/1 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:2px}
-@media(max-width:599px){.app-shell:has(.integrated-tower)>.bottom-nav{bottom:0}}
+@media(max-width:599px){.app-shell:has(.integrated-tower)>.bottom-nav{bottom:0}.schedule-calendar-title h1{font-size:clamp(21px,6vw,24px)}}

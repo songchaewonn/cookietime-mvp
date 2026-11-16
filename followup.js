@@ -90,6 +90,7 @@
 
   let scheduleViewMode = 'month';
   let scheduleSelectedDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  let scheduleDateActivated = false;
 
   function scheduleDayMarkup(dayDate) {
     const classes = state.classes.filter(item => item.day === dayDate.getDay()).sort((a, b) => a.start.localeCompare(b.start));
@@ -146,16 +147,20 @@
     }
     const month = scheduleSelectedDate.getMonth() + 1, year = scheduleSelectedDate.getFullYear();
     const toggle = `<div class="schedule-view-toggle" role="group" aria-label="시간표 보기 방식"><button type="button" data-sched-view="week" class="${scheduleViewMode === 'week' ? 'active' : ''}">주별</button><button type="button" data-sched-view="month" class="${scheduleViewMode === 'month' ? 'active' : ''}">월별</button></div>`;
-    let content;
+    let range, calendar;
     if (scheduleViewMode === 'month') {
-      content = `<div class="chagok-month-head"><h1>${year}년 ${month}월</h1><button data-sched-month="-1" aria-label="이전 달">‹</button><button data-sched-month="1" aria-label="다음 달">›</button>${toggle}<button class="month-add" data-modal="class" aria-label="수업 추가">＋</button></div><section class="month-calendar"><div class="month-week">${weekdays.map((weekday, i) => `<b class="${i === 0 ? 'sunday' : ''}">${weekday}</b>`).join('')}</div><div class="month-days">${cells.join('')}</div></section>${scheduleDayMarkup(scheduleSelectedDate)}`;
+      range = `<div class="schedule-range"><button data-sched-month="-1" aria-label="이전 달">‹</button><span>${month}월</span><button data-sched-month="1" aria-label="다음 달">›</button></div>`;
+      calendar = `<section class="month-calendar"><div class="month-week">${weekdays.map((weekday, i) => `<b class="${i === 0 ? 'sunday' : ''}">${weekday}</b>`).join('')}</div><div class="month-days">${cells.join('')}</div></section>`;
     } else {
       const weekStart = new Date(scheduleSelectedDate);
       weekStart.setDate(weekStart.getDate() - weekStart.getDay());
       const days = Array.from({ length: 7 }, (_, i) => new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate() + i));
-      content = `<div class="page-heading"><div><div class="eyebrow">시간표</div><h1 class="page-title">주별 일정</h1></div><button class="button" data-modal="class">＋ 수업 추가</button></div><div class="week-switch"><button data-sched-week="-1" aria-label="이전 주">‹</button><span>${days[0].getMonth() + 1}월 ${days[0].getDate()}일 — ${days[6].getMonth() + 1}월 ${days[6].getDate()}일</span><button data-sched-week="1" aria-label="다음 주">›</button>${toggle}</div><div class="day-strip">${days.map(date => `<button class="day-chip ${dayKey(date) === dayKey(scheduleSelectedDate) ? 'selected' : ''}" data-sched-date-full="${date.toISOString()}">${weekdays[date.getDay()]}<b>${date.getDate()}</b></button>`).join('')}</div>${scheduleDayMarkup(scheduleSelectedDate)}`;
+      range = `<div class="schedule-range"><button data-sched-week="-1" aria-label="이전 주">‹</button><span>${days[0].getMonth() + 1}월 ${days[0].getDate()}일 — ${days[6].getMonth() + 1}월 ${days[6].getDate()}일</span><button data-sched-week="1" aria-label="다음 주">›</button></div>`;
+      calendar = `<div class="day-strip">${days.map(date => `<button class="day-chip ${dayKey(date) === dayKey(scheduleSelectedDate) ? 'selected' : ''}" data-sched-date-full="${date.toISOString()}">${weekdays[date.getDay()]}<b>${date.getDate()}</b></button>`).join('')}</div>`;
     }
-    return content;
+    const header = `<div class="schedule-calendar-header"><div class="schedule-calendar-title"><h1>${year}년 ${month}월</h1><button class="month-add" data-modal="class" aria-label="수업 추가">＋</button></div><div class="schedule-calendar-controls">${range}${toggle}</div></div>`;
+    const dayPrompt = '<div class="card schedule-date-prompt">일정을 확인할 날짜를 선택하세요.</div>';
+    return `${header}${calendar}${scheduleDateActivated ? scheduleDayMarkup(scheduleSelectedDate) : dayPrompt}`;
   };
 
   function timeLabel(at) {
@@ -228,11 +233,12 @@
         const day = scheduleSelectedDate.getDate();
         const next = new Date(scheduleSelectedDate.getFullYear(), scheduleSelectedDate.getMonth() + Number(button.dataset.schedMonth), 1);
         scheduleSelectedDate = new Date(next.getFullYear(), next.getMonth(), Math.min(day, new Date(next.getFullYear(), next.getMonth() + 1, 0).getDate()));
+        scheduleDateActivated = false;
         render();
       }));
-      scheduleRoot.querySelectorAll('[data-sched-date]').forEach(button => button.addEventListener('click', () => { scheduleSelectedDate = new Date(scheduleSelectedDate.getFullYear(), scheduleSelectedDate.getMonth(), Number(button.dataset.schedDate)); render(); }));
-      scheduleRoot.querySelectorAll('[data-sched-date-full]').forEach(button => button.addEventListener('click', () => { scheduleSelectedDate = new Date(button.dataset.schedDateFull); render(); }));
-      scheduleRoot.querySelectorAll('[data-sched-week]').forEach(button => button.addEventListener('click', () => { scheduleSelectedDate.setDate(scheduleSelectedDate.getDate() + Number(button.dataset.schedWeek) * 7); render(); }));
+      scheduleRoot.querySelectorAll('[data-sched-date]').forEach(button => button.addEventListener('click', () => { scheduleSelectedDate = new Date(scheduleSelectedDate.getFullYear(), scheduleSelectedDate.getMonth(), Number(button.dataset.schedDate)); scheduleDateActivated = true; render(); }));
+      scheduleRoot.querySelectorAll('[data-sched-date-full]').forEach(button => button.addEventListener('click', () => { scheduleSelectedDate = new Date(button.dataset.schedDateFull); scheduleDateActivated = true; render(); }));
+      scheduleRoot.querySelectorAll('[data-sched-week]').forEach(button => button.addEventListener('click', () => { scheduleSelectedDate.setDate(scheduleSelectedDate.getDate() + Number(button.dataset.schedWeek) * 7); scheduleDateActivated = false; render(); }));
     }
     return result;
   };
