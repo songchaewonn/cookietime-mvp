@@ -79,7 +79,7 @@
     return `<p class="it-copy">매월 1일 00시, 한국 시간에 새 타워가 시작돼요.<br>지난달에 쌓은 쿠키는 이곳에 보관돼요.</p><button class="it-record-current" data-tower-month="${current.month}"><span>${monthLabel(current.month)} · 이번 달</span><strong>${number(current.cookies)} <small>개의 쿠키 · ${number(current.height)}m　›</small></strong><p>${duration(current.focusSeconds)} 집중</p></button>
       ${past.length ? past.map(record => `<button class="it-record-row" data-tower-month="${record.month}"><i>${Core.stageFor(record.cookies * 10).id === 'space' ? '🪐' : '🍪'}</i><span>${monthLabel(record.month)}<small>${duration(record.focusSeconds)} 집중</small></span><b>${number(record.cookies)}개<small>${number(record.cookies * Core.HEIGHT_PER_COOKIE)}m　›</small></b></button>`).join('') : '<div class="it-empty-record">🍪<strong>첫 번째 달을 쌓고 있어요</strong><p>다음 달에는 이곳에서<br>이번 달의 타워를 다시 만나요.</p></div>'}
       ${state.cookieTower.migration?.undatedCookies ? `<p class="it-copy">날짜가 남아 있지 않은 기존 쿠키 ${number(state.cookieTower.migration.undatedCookies)}개는 연결한 달에 한 번만 포함했어요. 날짜가 있는 기존 기록은 해당 달에 보관했어요.</p>` : ''}
-      <button class="it-secondary" data-tower-action="export">월별 기록 파일로 저장하기　↓</button><button class="it-secondary" data-tower-action="analytics">집중 통계와 스트릭 달력 보기　↗</button>`;
+      <button class="it-secondary" data-tower-action="share">이미지로 저장하기　↓</button><button class="it-secondary" data-tower-action="analytics">집중 통계와 스트릭 달력 보기　↗</button>`;
   }
   function download(blob, filename) {
     const url = URL.createObjectURL(blob), link = document.createElement('a');
@@ -114,11 +114,6 @@
       rewards.className = 'it-focus-link'; rewards.dataset.towerAction = 'visit';
       rewards.innerHTML = `이번 달 쿠키 <b data-tower-count>${number(Integration.summary(state).cookies)}개</b>　타워 보기 ↗<small>연속 집중 <span data-tower-continuous>${clock(state.focus.towerSeconds || 0)}</span> · 휴식하면 새로 시작해요</small>`;
       document.querySelector('.bake-page')?.append(rewards);
-    }
-    if (page === 'settings' && state.settings.onboardingDone) {
-      const button = document.createElement('button'); button.className = 'button secondary full';
-      button.dataset.towerAction = 'history'; button.textContent = '쿠키 타워 월별 기록 · 내보내기';
-      document.querySelector('#app')?.append(button);
     }
   };
   statsPage = pageMarkup;

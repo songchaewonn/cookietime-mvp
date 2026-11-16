@@ -65,13 +65,13 @@
       cookies += cookie(n, x, baseY - n * maxStep, { fresh: options.animate && n >= visibleCount - Math.min(options.animate, visibleCount), delay: Math.max(0, n - (visibleCount - options.animate)) * 160 });
     }
     let ruler = '';
-    const interval = height >= 10000 ? 2000 : height >= 1000 ? 500 : 100;
-    const baseline = Math.max(0, Math.floor(height / interval) * interval - interval * 2);
-    const topY = h * .247, bottomY = h - 178, rulerStep = (bottomY - topY) / 5;
+    const rulerBottom = h - 267;
+    const rulerTop = rulerBottom - Math.max(0, visibleCount - 1) * maxStep;
+    const rulerStep = (rulerBottom - rulerTop) / 5;
     for (let i = 0; i <= 5; i++) {
-      const value = baseline + (5 - i) * interval;
+      const value = Math.round((height * (5 - i)) / 5);
       const label = value >= 1000 ? `${Number((value / 1000).toFixed(1))}km` : `${value}m`;
-      const y = topY + i * rulerStep;
+      const y = rulerTop + i * rulerStep;
       ruler += `<path d="M12 ${y}h12" stroke="currentColor" stroke-width="1"/><text x="30" y="${y + 4}" font-size="10.5" fill="currentColor" font-family="Arial, sans-serif" font-weight="600">${label}</text>`;
       if (i < 5) ruler += `<path d="M16 ${y + rulerStep / 2}h6" stroke="currentColor" stroke-width=".85" opacity=".6"/>`;
     }
