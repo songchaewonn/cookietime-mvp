@@ -8,7 +8,7 @@ out = Path(__file__).resolve().parents[1] / 'delivery-qr'
 out.mkdir(exist_ok=True)
 items = [
     ('android-download', 'chagok Android 다운로드', 'chagok v1.0.0 APK', 'https://github.com/songchaewonn/cookietime-android-mvp/releases/download/v1.0.0/chagok-v1.0.0.apk'),
-    ('web-preview', '웹 앱 둘러보기', '설치 없이 브라우저에서 실행', 'https://songchaewonn.github.io/cookietime-mvp/?rev=33dbe67'),
+    ('web-preview', '웹 앱 둘러보기', '설치 없이 브라우저에서 실행', 'https://songchaewonn.github.io/cookietime-mvp/?rev=6007935'),
 ]
 svg_factory = __import__('qrcode.image.svg', fromlist=['SvgPathImage']).SvgPathImage
 font = ImageFont.truetype('C:/Windows/Fonts/malgun.ttf', 23)
@@ -30,6 +30,6 @@ for i, (name, title, subtitle, url) in enumerate(items):
     d.text((i * 600 + 35, 685), title, font=bold, fill='#38251a')
     d.text((i * 600 + 35, 735), subtitle, font=font, fill='#7d4937')
 sheet.save(out / 'chagok-qr-guide.png')
-report = '# chagok QR\n\n- chagok Android v1.0.0 APK (GitHub Release asset verified)\n- Web app (revision 33dbe67)\n\n' + ''.join(f'- {title}: {url}\n' for _, title, _, url in items)
+report = '# chagok QR\n\n- chagok Android v1.0.0 APK (GitHub Release asset verified)\n- Web app (revision 6007935)\n\n' + ''.join(f'- {title}: {url}\n' for _, title, _, url in items)
 (out / 'verification.md').write_text(report, encoding='utf-8')
 print(out)
