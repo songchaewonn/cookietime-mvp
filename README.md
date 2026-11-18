@@ -1,4 +1,4 @@
-# CookieTime Web MVP
+# chagok Web App
 
 **쿠키 타워가 기존 앱의 ‘기록’ 탭에 연결되었습니다.** 기존 집중 타이머와 시간표의 공강 판정으로 적립하고, 한국 시간 매월 1일에 새 타워를 시작하며 지난달 기록을 보관합니다. `node cookie-tower/server.cjs --app` 실행 후 `http://127.0.0.1:4173/`에서 확인할 수 있습니다. [적립·기존 기록 이전·검증 안내](cookie-tower/README.md).
 
