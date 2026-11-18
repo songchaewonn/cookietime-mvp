@@ -110,6 +110,7 @@ function loadExistingApp() {
   vm.runInContext(source, context);
   vm.runInContext("render=()=>{};showToast=()=>{};state.settings.onboardingDone=true;state.settings.focusMode='stopwatch';state.classes=[];state.tasks=[];", context);
   return { context, intervals, run: source => vm.runInContext(source, context), advance(seconds) { now += seconds * 1000; }, loadDesign() {
+    vm.runInContext("globalThis.location={hash:''};", context);
     let design = fs.readFileSync(path.join(root, 'design.js'), 'utf8');
     design = design.replace('render=designRender;', 'render=()=>{};');
     vm.runInContext(design, context);
