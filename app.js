@@ -118,12 +118,16 @@ function focusAction(action){
     if(!f.deviation){
       window.CookieTowerIntegration.end(state);
       f.deviation=true;f.deviationAt=Date.now();f.vibrationStage=0;
+      // Pause ends this continuous-focus streak. Elapsed focus has already
+      // been added to the daily total by pulse(); start the display at 00:00
+      // when focus resumes so breaks never count toward continuous rewards.
+      f.sessionSeconds=0;f.rewardedHours=0;f.gapFocusSeconds=0;f.rewardedGapHours=0;
       if(state.settings.vibration){navigator.vibrate?.([80,60,80]);window.NativeMvp?.vibrate?.(180)}
       const log={id:crypto.randomUUID(),app:'선택한 앱',start:Date.now()};
       state.logs.push(log);f.activeDeviationLogId=log.id;
       showToast('잠깐 쉬어도 괜찮아요. 연속 집중은 돌아올 때 새로 시작해요.');
     }else{
-      finishBreak(f);window.CookieTowerIntegration.begin(state);
+      finishBreak(f);f.sessionStartedAt=Date.now();window.CookieTowerIntegration.begin(state);
       showToast('돌아온 걸 환영해요!');
     }
   }else if(action==='stop-focus'){
