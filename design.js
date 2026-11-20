@@ -55,7 +55,7 @@ function openFocusModePicker(){
   const form=modal.querySelector('#focus-mode-form'),duration=modal.querySelector('#focus-timer-minutes'),durationField=modal.querySelector('.focus-duration-field'),syncDuration=()=>{const showDuration=form.elements['focus-mode'].value==='timer';duration.disabled=!showDuration;durationField.hidden=!showDuration};
   form.querySelectorAll('input[name="focus-mode"]').forEach(input=>input.addEventListener('change',syncDuration));syncDuration();
   modal.querySelectorAll('[data-mode-cancel]').forEach(button=>button.addEventListener('click',()=>modal.replaceChildren()));
-  form.addEventListener('submit',event=>{event.preventDefault();const mode=form.elements['focus-mode'].value;state.settings.focusMode=mode;if(mode==='timer')state.settings.focusTimerMinutes=Math.min(600,Math.max(1,Number(duration.value)||25));save();modal.replaceChildren();page='focus';if(!state.focus.active)focusAction('start-focus');else render()});
+  form.addEventListener('submit',event=>{event.preventDefault();const mode=form.elements['focus-mode'].value;state.settings.focusMode=mode;if(mode==='timer')state.settings.focusTimerMinutes=Math.min(600,Math.max(1,Number(duration.value)||25));save();modal.replaceChildren();page='focus';focusAction('start-focus')});
 }
 
 function focusCompletePage(){const f=state.focus,clock=value=>`${String(Math.floor(value/60)).padStart(2,'0')}:${String(value%60).padStart(2,'0')}`,now=new Date(),time=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;return `<section class="bake-complete"><time class="complete-clock">${time}</time><p class="complete-eyebrow">쿠키가 다 구워졌어요</p><h1>집중 완료!</h1><div class="complete-oven oven-machine"><div class="oven-top-lines" aria-hidden="true"><i></i><i></i><i></i></div><div class="complete-display"><strong>${clock(0)}</strong><span class="complete-check" aria-label="완료">✓</span></div><div class="complete-window"><i class="complete-heat complete-heat-top"></i><div class="complete-tray"></div><span class="complete-speed-line speed-line-one" aria-hidden="true"></span><span class="complete-speed-line speed-line-two" aria-hidden="true"></span><span class="complete-speed-line speed-line-three" aria-hidden="true"></span></div><img class="complete-cookie-slide" src="public/assets/tower-cookie-reference.png" alt="오븐에서 나온 쿠키"/><div class="oven-foot" aria-hidden="true"></div></div><p class="complete-summary">이번 집중 ${clock(f.sessionSeconds||0)} · 오늘 누적 ${clock(f.seconds||0)}</p><div class="complete-actions"><button class="button full" data-unload-cookie>쿠키 꺼내기</button><button class="button secondary full" data-bake-again>한 판 더 굽기</button></div></section>`}
@@ -129,7 +129,7 @@ cookieUiTick=setInterval(()=>{
   if(page!=='focus')return;
   const timerNode=document.querySelector('.focus-timer');
   if(!timerNode)return;
-  const shown=mode==='timer'?Math.max(0,target-elapsed):elapsed;
+  const shown=state.focus.deviation?(mode==='timer'?target:0):mode==='timer'?Math.max(0,target-elapsed):elapsed;
   timerNode.textContent=`${String(Math.floor(shown/60)).padStart(2,'0')}:${String(shown%60).padStart(2,'0')}`;
 },250);
 
